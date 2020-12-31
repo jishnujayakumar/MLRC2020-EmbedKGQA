@@ -11,7 +11,7 @@ import random
 
 class RelationExtractor(nn.Module):
 
-    def __init__(self, embedding_dim, relation_dim, num_entities, pretrained_embeddings, device, entdrop, reldrop, scoredrop, l3_reg, model, ls, do_batch_norm, freeze=True):
+    def __init__(self, embedding_dim, relation_dim, num_entities, pretrained_embeddings, device, entdrop, reldrop, scoredrop, l3_reg, model, que_embedding_model, ls, do_batch_norm, freeze=True):
         super(RelationExtractor, self).__init__()
         self.device = device
         self.model = model
@@ -21,9 +21,19 @@ class RelationExtractor(nn.Module):
         self.do_batch_norm = do_batch_norm
         if not self.do_batch_norm:
             print('Not doing batch norm')
-        self.roberta_pretrained_weights = 'roberta-base'
-        self.roberta_model = RobertaModel.from_pretrained(self.roberta_pretrained_weights)
-        for param in self.roberta_model.parameters():
+
+        if que_embedding_model == 'RoBERTa'.lower():
+            self.que_embedding_model = RobertaModel.from_pretrained('roberta-base')
+        elif que_embedding_model == 'XLNet'.lower():
+            self.que_embedding_model = XLNetModel.from_pretrained('xlnet-base-cased')
+        elif que_embedding_model == 'ALBERT'.lower():
+            self.que_embedding_model = AlbertModel.from_pretrained('albert-base-v2')
+        elif que_embedding_model == 'SentenceTransformer'.lower():
+            self.que_embedding_model = AutoModel.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
+        elif que_embedding_model == 'Reformer'.lower():
+            self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-crime-and-punishment')
+
+        for param in self.que_embedding_model.parameters():
             param.requires_grad = True
         if self.model == 'DistMult':
             multiplier = 1
@@ -218,11 +228,11 @@ class RelationExtractor(nn.Module):
 
     
     def getQuestionEmbedding(self, question_tokenized, attention_mask):
-        roberta_last_hidden_states = self.roberta_model(question_tokenized, attention_mask=attention_mask)[0]
-        states = roberta_last_hidden_states.transpose(1,0)
+        last_hidden_states = self.que_embedding_model(question_tokenized, attention_mask=attention_mask)[0]
+        states = last_hidden_states.transpose(1,0)
         cls_embedding = states[0]
         question_embedding = cls_embedding
-        # question_embedding = torch.mean(roberta_last_hidden_states, dim=1)
+        # question_embedding = torch.mean(last_hidden_states, dim=1)
         return question_embedding
 
     def forward(self, question_tokenized, attention_mask, p_head, p_tail):    
