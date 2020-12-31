@@ -156,8 +156,8 @@ def set_bn_eval(m):
 def get_chk_suffix():
     return '.chkpt'
 
-def get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix="", kg_type):
-    return f"{checkpoint_path}{model_name}_{num_hops}_{suffix}_{kg_type}"
+def get_checkpoint_file_path(chkpt_path, model_name, num_hops, suffix, kg_type):
+    return f"{chkpt_path}{model_name}_{num_hops}_{suffix}_{kg_type}"
         
 def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, kg_type, valid_data_path=None):
     entities = np.load(entity_path)
@@ -228,7 +228,7 @@ def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg
                     if freeze == True:
                         suffix = '_frozen'
                     checkpoint_path = '../../checkpoints/MetaQA/'
-                    checkpoint_file_name = get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix=suffix, kg_type)+get_chk_suffix()
+                    checkpoint_file_name = get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix, kg_type)+get_chk_suffix()
                     print('Saving checkpoint to ', checkpoint_file_name)
                     torch.save(model.state_dict(), checkpoint_file_name)
                 elif (score < best_score + eps) and (no_update < patience):
@@ -236,11 +236,11 @@ def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg
                     print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
                 elif no_update == patience:
                     print("Model has exceed patience. Saving best model and exiting")
-                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
+                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                     exit()
                 if epoch == nb_epochs-1:
                     print("Final Epoch has reached. Stopping and saving model.")
-                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
+                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                     exit()
                     
 
