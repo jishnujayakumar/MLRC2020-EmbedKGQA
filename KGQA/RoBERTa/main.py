@@ -56,6 +56,7 @@ parser.add_argument('--use_cuda', type=bool, default=True)
 parser.add_argument('--patience', type=int, default=5)
 parser.add_argument('--freeze', type=str2bool, default=True)
 parser.add_argument('--do_batch_norm', type=str2bool, default=True)
+parser.add_argument('--que_embedding_model', type=str2bool, default='RoBERTa')
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3,4,5,6,7"
 args = parser.parse_args()
@@ -292,7 +293,7 @@ def getEntityEmbeddings(kge_model, hops):
     f.close()
     return e
 
-def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, valid_data_path=None):
+def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None):
     print('Loading entities and relations')
     kg_type = 'full'
     if 'half' in hops:
@@ -474,7 +475,8 @@ if args.mode == 'train':
     ls=args.ls,
     load_from=args.load_from,
     outfile=args.outfile,
-    do_batch_norm=args.do_batch_norm)
+    do_batch_norm=args.do_batch_norm
+    que_embedding_model=args.que_embedding_model)
 
 
 

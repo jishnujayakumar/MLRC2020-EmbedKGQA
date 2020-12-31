@@ -156,7 +156,7 @@ def set_bn_eval(m):
 def get_chk_suffix():
     return '.chkpt'
 
-def get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type):
+def get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix="", kg_type):
     return f"{checkpoint_path}{model_name}_{num_hops}_{suffix}_{kg_type}"
         
 def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, kg_type, valid_data_path=None):
