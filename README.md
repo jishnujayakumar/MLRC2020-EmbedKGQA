@@ -4,6 +4,20 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Requirements
 - Python >= 3.7.5
 
+# Get started
+
+```bash
+# clone the repo
+# set the data in required directories
+# use pretrained KG embeddings or train from scratch
+
+# Install HugginFace transformers packages from source
+git clone https://github.com/huggingface/transformers
+cd transformers
+pip install .
+```
+
+
 # Helpful links
 - [Read](https://github.com/malllabiisc/EmbedKGQA#instructions) for details about data and pretrained weights 
 - [Read](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) for details about dataset creation
