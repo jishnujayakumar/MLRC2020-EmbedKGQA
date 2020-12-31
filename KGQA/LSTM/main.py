@@ -153,8 +153,13 @@ def set_bn_eval(m):
     if classname.find('BatchNorm1d') != -1:
         m.eval()
 
+def get_chk_suffix():
+    return '.chkpt'
 
-def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, valid_data_path=None):
+def get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type):
+    return f"{checkpoint_path}{model_name}_{num_hops}_{suffix}_{kg_type}"
+        
+def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, kg_type, valid_data_path=None):
     entities = np.load(entity_path)
     relations = np.load(relation_path)
     e,r = preprocess_entities_relations(entity_dict, relation_dict, entities, relations)
@@ -223,7 +228,7 @@ def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg
                     if freeze == True:
                         suffix = '_frozen'
                     checkpoint_path = '../../checkpoints/MetaQA/'
-                    checkpoint_file_name = checkpoint_path +model_name+ '_' + num_hops + suffix + ".pt"
+                    checkpoint_file_name = get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix=suffix, kg_type)+get_chk_suffix()
                     print('Saving checkpoint to ', checkpoint_file_name)
                     torch.save(model.state_dict(), checkpoint_file_name)
                 elif (score < best_score + eps) and (no_update < patience):
@@ -231,11 +236,11 @@ def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg
                     print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
                 elif no_update == patience:
                     print("Model has exceed patience. Saving best model and exiting")
-                    torch.save(best_model, checkpoint_path+ "best_score_model.pt")
+                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                     exit()
                 if epoch == nb_epochs-1:
                     print("Final Epoch has reached. Stopping and saving model.")
-                    torch.save(best_model, checkpoint_path +"best_score_model.pt")
+                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix='', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                     exit()
                     
 
@@ -342,7 +347,8 @@ if args.mode == 'train':
     decay=args.decay,
     ls=args.ls,
     w_matrix=w_matrix,
-    bn_list=bn_list)
+    bn_list=bn_list,
+    kg_type=kg_type)
 
 
 
@@ -357,4 +363,5 @@ elif args.mode == 'eval':
     gpu=args.gpu,
     hidden_dim=args.hidden_dim,
     relation_dim=args.relation_dim,
-    embedding_dim=args.embedding_dim)
+    embedding_dim=args.embedding_dim,
+    kg_type=kg_type)
