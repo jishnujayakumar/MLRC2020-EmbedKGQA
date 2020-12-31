@@ -56,7 +56,7 @@ parser.add_argument('--use_cuda', type=bool, default=True)
 parser.add_argument('--patience', type=int, default=5)
 parser.add_argument('--freeze', type=str2bool, default=True)
 parser.add_argument('--do_batch_norm', type=str2bool, default=True)
-parser.add_argument('--que_embedding_model', type=str2bool, default='RoBERTa')
+parser.add_argument('--que_embedding_model', type=str, default='RoBERTa')
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3,4,5,6,7"
 args = parser.parse_args()
@@ -316,7 +316,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     dataset = DatasetMetaQA(data, e, entity2idx)
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     print('Creating model...')
-    model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, do_batch_norm=do_batch_norm)
+    model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
     print('Model created!')
     if load_from != '':
         # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
