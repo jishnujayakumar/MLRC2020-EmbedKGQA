@@ -476,7 +476,7 @@ if args.mode == 'train':
     load_from=args.load_from,
     outfile=args.outfile,
     do_batch_norm=args.do_batch_norm,
-    que_embedding_model=args.que_embedding_model)
+    qem=args.que_embedding_model)
 
 
 
