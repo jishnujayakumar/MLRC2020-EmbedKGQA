@@ -294,7 +294,7 @@ class Experiment:
                     pretty_tbl.add_row(['Model', self.model])
                     print(pretty_tbl)
 
-                    print(time.time()-start_test)
+                    print(f'Training-time: {round(time.time()-start_test,2)}')
 
                     pretty_tbl = PrettyTable()
                     pretty_tbl.field_names = ["Parameter", "Value"]
