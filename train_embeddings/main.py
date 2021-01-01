@@ -332,7 +332,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     dataset = args.dataset
-    data_dir = "../data/%s/" % dataset
+    data_dir = f"../data/{dataset}/"
     torch.backends.cudnn.deterministic = True 
     seed = 20
     np.random.seed(seed)
@@ -347,6 +347,8 @@ if __name__ == '__main__':
                             valid_steps=args.valid_steps, loss_type=args.loss_type, do_batch_norm=args.do_batch_norm,
                             dataset=args.dataset, model=args.model, l3_reg=args.l3_reg, load_from=args.load_from)
     
-    experiment.train_and_eval(Data(data_dir=data_dir, reverse=True))
+    d=Data(data_dir=data_dir, reverse=True)
+
+    experiment.train_and_eval(d)
                 
 
