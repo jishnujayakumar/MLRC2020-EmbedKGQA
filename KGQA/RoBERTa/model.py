@@ -32,6 +32,9 @@ class RelationExtractor(nn.Module):
             self.que_embedding_model = AutoModel.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
         elif que_embedding_model == 'Reformer'.lower():
             self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-crime-and-punishment')
+        else:
+            print('Incorrect question embeddding model specified:', self.model)
+            exit(0)
 
         for param in self.que_embedding_model.parameters():
             param.requires_grad = True
