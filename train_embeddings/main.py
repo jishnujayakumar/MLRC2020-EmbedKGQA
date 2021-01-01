@@ -137,7 +137,7 @@ class Experiment:
 
     def write_embedding_files(self, model):
         model.eval()
-        model_folder = f"../kg_embeddings/{model}/{self.dataset}" 
+        model_folder = f"../kg_embeddings/{self.model}/{self.dataset}" 
         data_folder = "../data/%s/" % self.dataset
         embedding_type = self.model
         if os.path.exists(model_folder) == False:
