@@ -8,6 +8,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 import argparse
 from tqdm import tqdm
 import os
+from prettytable import PrettyTable
 
     
 class Experiment:
@@ -128,11 +129,16 @@ class Experiment:
         hitat1 = np.mean(hits[0])
         meanrank = np.mean(ranks)
         mrr = np.mean(1./np.array(ranks))
-        print('Hits @10: {0}'.format(hitat10))
-        print('Hits @3: {0}'.format(hitat3))
-        print('Hits @1: {0}'.format(hitat1))
-        print('Mean rank: {0}'.format(meanrank))
-        print('Mean reciprocal rank: {0}'.format(mrr))
+
+        pretty_tbl = PrettyTable()
+        pretty_tbl.field_names = ["Metric", "Result"]
+        pretty_tbl.add_row(['Hits@10', hitat10])
+        pretty_tbl.add_row(['Hits@3', hitat3])
+        pretty_tbl.add_row(['Hits@1', hitat1])
+        pretty_tbl.add_row(['MeanRank', meanrank])
+        pretty_tbl.add_row(['MeanReciprocalRank', mrr])
+        print(pretty_tbl)
+
         return [mrr, meanrank, hitat10, hitat3, hitat1]
 
     def write_embedding_files(self, model):
@@ -140,8 +146,8 @@ class Experiment:
         model_folder = f"../kg_embeddings/{self.model}/{self.dataset}" 
         data_folder = "../data/%s/" % self.dataset
         embedding_type = self.model
-        if os.path.exists(model_folder) == False:
-            os.mkdir(model_folder)
+        if(not os.path.exists(model_folder)):
+            os.makedirs(model_folder)
         R_numpy = model.R.weight.data.cpu().numpy()
         E_numpy = model.E.weight.data.cpu().numpy()
         bn_list = []
@@ -211,9 +217,14 @@ class Experiment:
             f.write(key + '\t' + str(value) +'\n')
         f.close()
         train_data_idxs = self.get_data_idxs(d.train_data)
-        print("Number of training data points: %d" % len(train_data_idxs))
-        print('Entities: %d' % len(self.entity_idxs))
-        print('Relations: %d' % len(self.relation_idxs))
+
+        pretty_tbl = PrettyTable()
+        pretty_tbl.field_names = ["ARTIFACT", "SAMPLES"]
+        pretty_tbl.add_row(['#TrainingSamples', len(train_data_idxs)])
+        pretty_tbl.add_row(['#Entities', len(self.entity_idxs)])
+        pretty_tbl.add_row(['#Relations', len(self.relation_idxs)])
+        print(pretty_tbl)
+        
         model = KGE(d, self.ent_vec_dim, self.rel_vec_dim, **self.kwargs)
         model.init()
         if self.load_from != '':
@@ -275,19 +286,28 @@ class Experiment:
                         self.write_embedding_files(model)
                         print('Model saved!')    
                     
-                    print('Best valid:', best_valid)
-                    print('Best Test:', best_test)
-                    print('Dataset:', self.dataset)
-                    print('Model:', self.model)
+                    pretty_tbl = PrettyTable()
+                    pretty_tbl.field_names = ["ARTIFACT", "VALUE"]
+                    pretty_tbl.add_row(['Best valid', best_valid])
+                    pretty_tbl.add_row(['Best test', best_test])
+                    pretty_tbl.add_row(['Dataset', self.dataset])
+                    pretty_tbl.add_row(['Model', self.model])
+                    print(pretty_tbl)
 
                     print(time.time()-start_test)
-                    print('Learning rate %f | Decay %f | Dim %d | Input drop %f | Hidden drop 2 %f | LS %f | Batch size %d | Loss type %s | L3 reg %f' % 
-                        (self.learning_rate, self.decay_rate, self.ent_vec_dim, self.kwargs["input_dropout"], 
-                         self.kwargs["hidden_dropout2"], self.label_smoothing, self.batch_size,
-                         self.loss_type, self.l3_reg))        
-           
 
-        
+                    pretty_tbl = PrettyTable()
+                    pretty_tbl.field_names = ["Parameter", "Value"]
+                    pretty_tbl.add_row(['Learning rate', self.learning_rate])
+                    pretty_tbl.add_row(['Decay', self.decay_rate])
+                    pretty_tbl.add_row(['Dim', self.ent_vec_dim])
+                    pretty_tbl.add_row(['Input drop', self.kwargs["input_dropout"]])
+                    pretty_tbl.add_row(['Hidden drop 2', self.kwargs["hidden_dropout2"]])
+                    pretty_tbl.add_row(['Label Smoothing', self.label_smoothing])
+                    pretty_tbl.add_row(['Batch size', self.batch_size])
+                    pretty_tbl.add_row(['Loss type', self.loss_type])
+                    pretty_tbl.add_row(['L3 reg', self.l3_reg])
+                    print(pretty_tbl)        
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
