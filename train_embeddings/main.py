@@ -41,17 +41,39 @@ class Experiment:
                        "do_batch_norm": do_batch_norm, "l3_reg": l3_reg}
         
     def get_data_idxs(self, data):
+
+        '''
+        Returns triples in their idx form, 
+        e.g.: (head_entity,relation,tail_entity) gets converted to (1,1,2)
+        '''
+
         data_idxs = [(self.entity_idxs[data[i][0]], self.relation_idxs[data[i][1]], \
                       self.entity_idxs[data[i][2]]) for i in range(len(data))]
         return data_idxs
-    
+
     def get_er_vocab(self, data):
+        
+        """
+        data =[[1,2,3],[1,2,3], [1,4,3]]
+        der_vocab : efaultdict(<class 'list'>, {(1, 2): [3, 3, 3], (1, 4): [3]})
+        
+        returns er_vocab: (h,r):[t]
+        """
+        
         er_vocab = defaultdict(list)
         for triple in data:
             er_vocab[(triple[0], triple[1])].append(triple[2])
         return er_vocab
 
+
     def get_batch(self, er_vocab, er_vocab_pairs, idx):
+        
+        '''
+        Returns 
+        1. batch: er_vocab_pairs(size:batch_size)
+        2. targets: batch_size*num_entities tensor with target label for each er_vocab pair 
+        '''
+        
         batch = er_vocab_pairs[idx:idx+self.batch_size]
         targets = torch.zeros([len(batch), len(d.entities)], dtype=torch.float32)
         if self.cuda:
@@ -115,7 +137,7 @@ class Experiment:
 
     def write_embedding_files(self, model):
         model.eval()
-        model_folder = "../kg_embeddings/%s/" % self.dataset
+        model_folder = f"../kg_embeddings/{model}/{self.dataset}" 
         data_folder = "../data/%s/" % self.dataset
         embedding_type = self.model
         if os.path.exists(model_folder) == False:
@@ -174,7 +196,7 @@ class Experiment:
         f2.close()
 
 
-    def train_and_eval(self):
+    def train_and_eval(self, d):
         torch.set_num_threads(2)
         best_valid = [0, 0, 0, 0, 0]
         best_test = [0, 0, 0, 0, 0]
@@ -192,7 +214,7 @@ class Experiment:
         print("Number of training data points: %d" % len(train_data_idxs))
         print('Entities: %d' % len(self.entity_idxs))
         print('Relations: %d' % len(self.relation_idxs))
-        model = TuckER(d, self.ent_vec_dim, self.rel_vec_dim, **self.kwargs)
+        model = KGE(d, self.ent_vec_dim, self.rel_vec_dim, **self.kwargs)
         model.init()
         if self.load_from != '':
             fname = self.load_from
@@ -205,7 +227,7 @@ class Experiment:
             scheduler = ExponentialLR(opt, self.decay_rate)
 
         er_vocab = self.get_er_vocab(train_data_idxs)
-        er_vocab_pairs = list(er_vocab.keys())
+        er_vocab_pairs = list(er_vocab.keys()) #list(er_vocab.keys())
 
         print("Starting training...")
 
@@ -317,13 +339,14 @@ if __name__ == '__main__':
     torch.manual_seed(seed)
     if torch.cuda.is_available:
         torch.cuda.manual_seed_all(seed) 
-    d = Data(data_dir=data_dir, reverse=True)
+
     experiment = Experiment(num_iterations=args.num_iterations, batch_size=args.batch_size, learning_rate=args.lr, 
                             decay_rate=args.dr, ent_vec_dim=args.edim, rel_vec_dim=args.rdim, cuda=args.cuda,
                             input_dropout=args.input_dropout, hidden_dropout1=args.hidden_dropout1, 
                             hidden_dropout2=args.hidden_dropout2, label_smoothing=args.label_smoothing, outfile=args.outfile,
                             valid_steps=args.valid_steps, loss_type=args.loss_type, do_batch_norm=args.do_batch_norm,
                             dataset=args.dataset, model=args.model, l3_reg=args.l3_reg, load_from=args.load_from)
-    experiment.train_and_eval()
+    
+    experiment.train_and_eval(Data(data_dir=data_dir, reverse=True))
                 
 

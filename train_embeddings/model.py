@@ -4,9 +4,9 @@ from torch.nn.init import xavier_normal_
 import torch.nn as nn
 import torch.nn.functional as F
 
-class TuckER(torch.nn.Module):
-    def __init__(self, d, d1, d2, **kwargs):
-        super(TuckER, self).__init__()
+class KGE(torch.nn.Module):
+    def __init__(self, d, ent_vec_dim, rel_vec_dim, **kwargs):
+        super(KGE, self).__init__()
 
         self.model = kwargs["model"]
         multiplier = 3
@@ -36,21 +36,21 @@ class TuckER(torch.nn.Module):
         elif self.model == 'TuckER':
             self.score_func = self.TuckER
             multiplier = 1
-            self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (d2, d1, d1)), 
+            self.W = torch.nn.Parameter(torch.tensor(np.random.uniform(-1, 1, (rel_vec_dim, ent_vec_dim, ent_vec_dim)), 
                                     dtype=torch.float, device="cuda", requires_grad=True))
         else:
             print('Incorrect model specified:', self.model)
             exit(0)
-        self.E = torch.nn.Embedding(len(d.entities), d1 * multiplier, padding_idx=0)
+        self.E = torch.nn.Embedding(len(d.entities), ent_vec_dim * multiplier, padding_idx=0)
         
         if self.model == 'RESCAL':
-            self.R = torch.nn.Embedding(len(d.relations), d1 * d1, padding_idx=0)
+            self.R = torch.nn.Embedding(len(d.relations), ent_vec_dim * ent_vec_dim, padding_idx=0)
         elif self.model == 'TuckER':
-            self.R = torch.nn.Embedding(len(d.relations), d2, padding_idx=0)
+            self.R = torch.nn.Embedding(len(d.relations), rel_vec_dim, padding_idx=0)
         else:
-            self.R = torch.nn.Embedding(len(d.relations), d1 * multiplier, padding_idx=0)
+            self.R = torch.nn.Embedding(len(d.relations), ent_vec_dim * multiplier, padding_idx=0)
 
-        self.entity_dim = d1 * multiplier
+        self.entity_dim = ent_vec_dim * multiplier
         self.do_batch_norm = True
         if kwargs["do_batch_norm"] == False:
             print('Not doing batch norm')
@@ -61,9 +61,9 @@ class TuckER(torch.nn.Module):
         self.l3_reg = kwargs["l3_reg"]
 
         if self.model in ['DistMult', 'RESCAL', 'SimplE', 'TuckER']: 
-            self.bn0 = torch.nn.BatchNorm1d(d1 * multiplier)
-            self.bn1 = torch.nn.BatchNorm1d(d1 * multiplier)
-            self.bn2 = torch.nn.BatchNorm1d(d1 * multiplier)
+            self.bn0 = torch.nn.BatchNorm1d(ent_vec_dim * multiplier)
+            self.bn1 = torch.nn.BatchNorm1d(ent_vec_dim * multiplier)
+            self.bn2 = torch.nn.BatchNorm1d(ent_vec_dim * multiplier)
         else:
             self.bn0 = torch.nn.BatchNorm1d(multiplier)
             self.bn1 = torch.nn.BatchNorm1d(multiplier)
