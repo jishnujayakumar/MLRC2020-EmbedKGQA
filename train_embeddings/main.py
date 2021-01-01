@@ -210,6 +210,7 @@ class Experiment:
         print("Starting training...")
 
         for it in range(1, self.num_iterations+1):
+            print(f"Iteration: {it}/{self.num_iterations+1}")
             start_train = time.time()
             model.train()    
             losses = []
