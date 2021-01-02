@@ -7,12 +7,14 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Get started
 
 ```bash
-#Clone the repo
+# Clone the repo
 git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
 cd MLRC2020-EmbedKGQA/
 pip install -r requirements.txt
 
-#Download and unzip data and pretrained_models
+# Download and unzip data and pretrained_models
+# Google frive folder: https://drive.google.com/drive/folders/1RlqGBMo45lTmWz9MUPTq-0KcjSd3ujxc
+# gdown requires anyone with the link id; right click on each file and get it 
 gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx; unzip data.zip;
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz; unzip pretrained_models.zip;
 
