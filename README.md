@@ -3,6 +3,8 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 
 # Requirements
 - Python >= 3.7.5
+- zip
+- unzip
 
 # Get started
 
