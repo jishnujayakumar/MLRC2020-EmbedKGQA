@@ -7,8 +7,15 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Get started
 
 ```bash
-# clone the repo
-# set the data in required directories
+#Clone the repo
+git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
+cd MLRC2020-EmbedKGQA/
+pip install -r requirements.txt
+
+#Download and unzip data and pretrained_models
+gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx; unzip data.zip;
+gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz; unzip pretrained_models.zip;
+
 # use pretrained KG embeddings or train from scratch
 
 # Install HugginFace transformers packages from source
