@@ -1,2 +1,7 @@
-prettytable
+torch
+networkx
+tqdm
 gdown
+prettytable
+
+
