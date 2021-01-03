@@ -33,7 +33,7 @@ class RelationExtractor(nn.Module):
         elif que_embedding_model == 'Reformer'.lower():
             self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-crime-and-punishment')
         else:
-            print('Incorrect question embeddding model specified:', self.model)
+            print('Incorrect question embeddding model specified:', self.que_embedding_model)
             exit(0)
 
         for param in self.que_embedding_model.parameters():
