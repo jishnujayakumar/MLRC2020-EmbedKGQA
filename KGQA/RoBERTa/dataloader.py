@@ -12,7 +12,7 @@ import numpy as np
 from transformers import *
 
 
-class DatasetMetaQA(Dataset):
+class DatasetWebQSP(Dataset):
     def __init__(self, data, entities, entity2idx):
         self.data = data
         self.entities = entities
@@ -82,8 +82,8 @@ class DatasetMetaQA(Dataset):
 #     attention_mask = torch.stack(attention_mask, dim=0)
 #     return question_tokenized, attention_mask, head_id, tail_onehot 
 
-class DataLoaderMetaQA(DataLoader):
+class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
-        super(DataLoaderMetaQA, self).__init__(*args, **kwargs)
+        super(DataLoaderWebQSP, self).__init__(*args, **kwargs)
         self.collate_fn = _collate_fn
 

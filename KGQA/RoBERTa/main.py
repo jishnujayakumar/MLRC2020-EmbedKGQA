@@ -8,7 +8,7 @@ from tqdm import tqdm
 import argparse
 import operator
 from torch.nn import functional as F
-from dataloader import DatasetMetaQA, DataLoaderMetaQA
+from dataloader import DatasetWebQSP, DataLoaderWebQSP
 from model import RelationExtractor
 from torch.optim.lr_scheduler import ExponentialLR, ReduceLROnPlateau
 import networkx as nx
@@ -293,7 +293,7 @@ def getEntityEmbeddings(kge_model, hops):
     f.close()
     return e
 
-def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, qem, valid_data_path=None):
+def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None):
     print('Loading entities and relations')
     kg_type = 'full'
     if 'half' in hops:
@@ -313,14 +313,14 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     # word2ix,idx2word, max_len = get_vocab(data)
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
-    dataset = DatasetMetaQA(data, e, entity2idx)
+    dataset = DatasetWebQSP(data, e, entity2idx)
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     print('Creating model...')
-    model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=qem, ls = ls, do_batch_norm=do_batch_norm)
+    model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
     print('Model created!')
     if load_from != '':
         # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
-        fname = "checkpoints/roberta_finetune/" + load_from + ".pt"
+        fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
         model.load_state_dict(torch.load(fname, map_location=lambda storage, loc: storage))
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -476,7 +476,7 @@ if args.mode == 'train':
     load_from=args.load_from,
     outfile=args.outfile,
     do_batch_norm=args.do_batch_norm,
-    qem=args.que_embedding_model)
+    que_embedding_model=args.que_embedding_model)
 
 
 
