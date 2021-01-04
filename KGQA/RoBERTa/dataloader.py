@@ -72,9 +72,6 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
 
-        # Tokenize question and map the tokens to thier word IDs.
-        attention_mask = []
-
         question = "<s> " + question + " </s>"
         # question_tokenized = tokenizer(question, return_tensors="pt")
         encoded_question = self.tokenizer.encode_plus(
