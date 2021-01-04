@@ -16,20 +16,21 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 ```bash
 # Clone the repo
 git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
-cd MLRC2020-EmbedKGQA/
-pip install -r requirements.txt
+cd MLRC2020-EmbedKGQA/ && pip install -r requirements.txt
 
 # Download and unzip data and pretrained_models
 # Google frive folder: https://drive.google.com/drive/folders/1RlqGBMo45lTmWz9MUPTq-0KcjSd3ujxc
 # gdown requires anyone with the link id; right click on each file and get it 
-gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx; unzip data.zip;
-gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz; unzip pretrained_models.zip;
+gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip;
+gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip;
 
 # Retrieve and install project in development mode
-git clone https://github.com/uma-pi1/kge.git; cd kge; pip install -e .;
+git clone https://github.com/uma-pi1/kge.git
+cd kge && pip install -e .
 
 # Install HugginFace transformers packages from source
-git clone https://github.com/huggingface/transformers; cd transformers; pip install .;
+git clone https://github.com/huggingface/transformers
+cd transformers && pip install .
 
 # use pretrained KG embeddings or train from scratch
 ```
