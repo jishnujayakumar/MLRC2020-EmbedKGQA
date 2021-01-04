@@ -294,7 +294,10 @@ def getEntityEmbeddings(kge_model, hops):
     return e
 
 def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None):
-    os.makedirs(f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/")
+    webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
+    if not os.path.exists(webqsp_checkpoint_folder):
+        os.makedirs(webqsp_checkpoint_folder)
+    
     print('Loading entities and relations')
     kg_type = 'full'
     if 'half' in hops:
