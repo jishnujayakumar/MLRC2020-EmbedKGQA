@@ -17,6 +17,7 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Clone the repo
 git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
 cd MLRC2020-EmbedKGQA/ && pip install -r requirements.txt
+mkdir -p checkpoints/ MLRC2020-EmbedKGQA/KGQA/RoBERTa/results/
 
 # Download and unzip data and pretrained_models
 # Google frive folder: https://drive.google.com/drive/folders/1RlqGBMo45lTmWz9MUPTq-0KcjSd3ujxc
