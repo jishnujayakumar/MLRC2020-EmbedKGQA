@@ -60,11 +60,7 @@ class DatasetWebQSP(Dataset):
     def __getitem__(self, index):
         data_point = self.data[index]
         question_text = data_point[1]
-
-        encoded_question = self.tokenize_question(question_text)
-        question_tokenized=encoded_question['input_ids']
-        attention_mask=encoded_question['attention_mask']
-
+        question_tokenized, attention_mask = self.tokenize_question(question_text)
         head_id = self.entity2idx[data_point[0].strip()]
         tail_ids = []
         for tail_name in data_point[2]:
@@ -77,16 +73,22 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
         question = f"<s>{question}</s>"
-        
-        encoded_question = self.tokenizer.encode_plus(
+        question_tokenized = self.tokenizer.tokenize(question)
+        question_tokenized = self.pad_sequence(question_tokenized, 64)
+        question_tokenized = torch.tensor(self.tokenizer.encode(
                                 question, # Question to encode
-                                add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
-                                padding = 'max_length',
-                                return_attention_mask = True,   # Construct attn. masks.
-                                return_tensors = 'pt'     # Return pytorch tensors.
-                            )
+                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                            ))
 
-        return encoded_question
+        attention_mask = []
+        for q in question_tokenized:
+            # 1 means padding token
+            if q == 1:
+                attention_mask.append(0)
+            else:
+                attention_mask.append(1)
+
+        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
 # def _collate_fn(batch):
 #     print(len(batch))
