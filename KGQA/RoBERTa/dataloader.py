@@ -20,7 +20,8 @@ class DatasetWebQSP(Dataset):
         self.pos_dict = defaultdict(list)
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
-        self.tokenizer = self.get_tokenizer(transformer_name)
+        self.tokenizer = None
+        self.get_tokenizer(transformer_name)
 
     def get_tokenizer(self, transformer_name):
         if transformer_name == 'RoBERTa':
@@ -81,7 +82,7 @@ class DatasetWebQSP(Dataset):
                                 return_attention_mask = True,   # Construct attn. masks.
                                 return_tensors = 'pt'     # Return pytorch tensors.
                             )
-                            
+
         return encoded_question['input_ids'], encoded_question['attention_mask']
 
 # def _collate_fn(batch):
