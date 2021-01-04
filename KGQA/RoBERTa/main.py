@@ -366,21 +366,18 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
                     no_update = 0
                     best_model = model.state_dict()
                     print(hops + " hop Validation accuracy (no relation scoring) increased from previous epoch", score)
-                    # writeToFile(answers, 'results_' + model_name + '_' + hops + '.txt')
-                    # torch.save(best_model, "checkpoints/roberta_finetune/best_score_model.pt")
-                    # torch.save(best_model, "checkpoints/roberta_finetune/" + outfile + ".pt")
+                    writeToFile(answers, '../../roberta_results/{outfile}.txt')
+                    torch.save(best_model, f"../../checkpoints/{outfile}/best_score_model.pt")
                 elif (score < best_score + eps) and (no_update < patience):
                     no_update +=1
                     print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
                 elif no_update == patience:
                     print("Model has exceed patience. Saving best model and exiting")
-                    # torch.save(best_model, "checkpoints/roberta_finetune/best_score_model.pt")
-                    # torch.save(best_model, "checkpoints/roberta_finetune/" + outfile + ".pt")
-                    exit()
+                    torch.save(best_model, f"../../checkpoints/{outfile}/best_score_model.pt")
+                    exit(0)
                 if epoch == nb_epochs-1:
                     print("Final Epoch has reached. Stoping and saving model.")
-                    # torch.save(best_model, "checkpoints/roberta_finetune/best_score_model.pt")
-                    # torch.save(best_model, "checkpoints/roberta_finetune/" + outfile + ".pt")
+                    torch.save(best_model, f"../../checkpoints/{outfile}/best_score_model.pt")
                     exit()
                 # torch.save(model.state_dict(), "checkpoints/roberta_finetune/"+str(epoch)+".pt")
                 # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")
