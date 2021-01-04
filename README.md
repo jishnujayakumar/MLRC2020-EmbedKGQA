@@ -6,6 +6,7 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 - zip
 - unzip
 - Pytorch version [1.3.0a0+24ae9b5](https://github.com/pytorch/pytorch/tree/24ae9b504094937fbc7c24012fbe5c601e024bcd). For more info, visit [here](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_19-10.html).
+- Huggingface == 4.1.1 [For new transformers like Reformer]
 
 
 # Helpful pointers
@@ -28,10 +29,6 @@ gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 # Retrieve and install project in development mode
 git clone https://github.com/uma-pi1/kge.git
 cd kge && pip install -e .
-
-# Install HugginFace transformers packages from source
-git clone https://github.com/huggingface/transformers
-cd transformers && pip install .
 
 # use pretrained KG embeddings or train from scratch
 ```
