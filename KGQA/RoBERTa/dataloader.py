@@ -13,16 +13,29 @@ from transformers import *
 
 
 class DatasetWebQSP(Dataset):
-    def __init__(self, data, entities, entity2idx):
+    def __init__(self, data, entities, entity2idx, transformer_name):
         self.data = data
         self.entities = entities
         self.entity2idx = entity2idx
         self.pos_dict = defaultdict(list)
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
-        self.tokenizer_class = RobertaTokenizer
-        self.pretrained_weights = 'roberta-base'
-        self.tokenizer = self.tokenizer_class.from_pretrained(self.pretrained_weights, cache_dir='.')
+        self.tokenizer = self.get_tokenizer(transformer_name)
+
+    def get_tokenizer(self, transformer_name):
+        if transformer_name == 'RoBERTa':
+            self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+        elif transformer_name == 'XLNet':
+            self.tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
+        elif transformer_name == 'ALBERT':
+            self.tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+        elif transformer_name == 'SentenceTransformer':
+            self.tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
+        elif transformer_name == 'Reformer':
+            self.tokenizer = ReformerTokenizer.from_pretrained('google/reformer-crime-and-punishment')
+        else:
+            print('Incorrect transformer specified:', transformer_name)
+            exit(0)
 
     def __len__(self):
         return len(self.data)

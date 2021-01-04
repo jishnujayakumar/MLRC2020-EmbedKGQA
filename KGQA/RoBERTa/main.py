@@ -277,11 +277,17 @@ def set_bn_eval(m):
     if classname.find('BatchNorm1d') != -1:
         m.eval()
 
-def getEntityEmbeddings(kge_model, hops):
+def getEntityEmbeddings(model_name, kge_model, hops):
     e = {}
-    entity_dict = '../../pretrained_models/embeddings/ComplEx_fbwq_full/entity_ids.del'
+
+    if model_name == "ComplEx":
+        model_dir = f"../../pretrained_models/embeddings/{model_name}"
+    else:
+        model_dir = f"../../kg_embeddings/{model_name}"
+
+    entity_dict = f"{model_dir}_fbwq_full/entity_ids.del"
     if 'half' in hops:
-        entity_dict = '../../pretrained_models/embeddings/ComplEx_fbwq_half/entity_ids.del'
+        entity_dict = f"{model_dir}_fbwq_half/entity_ids.del"
         print('Loading half entity_ids.del')
     embedder = kge_model._entity_embedder
     f = open(entity_dict, 'r')
@@ -302,12 +308,17 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     kg_type = 'full'
     if 'half' in hops:
         kg_type = 'half'
-    checkpoint_file = f"../../pretrained_models/embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
+    
+    if model_name == "ComplEx": 
+        checkpoint_file = f"../../pretrained_models/embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
+    else:
+        checkpoint_file = f"../../kg_embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
+
     print('Loading kg embeddings from', checkpoint_file)
     kge_checkpoint = load_checkpoint(checkpoint_file)
     kge_model = KgeModel.create_from(kge_checkpoint)
     kge_model.eval()
-    e = getEntityEmbeddings(kge_model, hops)
+    e = getEntityEmbeddings(model_name, kge_model, hops)
 
     print('Loaded entities and relations')
 
