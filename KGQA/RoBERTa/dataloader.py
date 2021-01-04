@@ -76,6 +76,7 @@ class DatasetWebQSP(Dataset):
         encoded_question = self.tokenizer(
             question, # Question to encode,
             add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
+            padding = True,
             max_length = 64,           # Pad & truncate all sentences.
             return_attention_mask = True,   # Construct attn. masks.
             return_tensors = 'pt'     # Return pytorch tensors.
