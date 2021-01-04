@@ -20,10 +20,10 @@ class DatasetWebQSP(Dataset):
         self.pos_dict = defaultdict(list)
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
-        self.tokenizer = self.get_tokenizer(transformer_name)
-        print("TOKENIZER", self.tokenizer)
+        self.tokenizer = None
+        self.set_tokenizer(transformer_name)
 
-    def get_tokenizer(self, transformer_name):
+    def set_tokenizer(self, transformer_name):
         if transformer_name == 'RoBERTa':
             self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
         elif transformer_name == 'XLNet':
@@ -73,7 +73,6 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
         question = "<s>"+question+"</s>"
-        print("Question: ", question)
         encoded_question = self.tokenizer(
             question, # Question to encode,
             add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
