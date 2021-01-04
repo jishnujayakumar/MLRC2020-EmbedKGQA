@@ -22,15 +22,15 @@ class RelationExtractor(nn.Module):
         if not self.do_batch_norm:
             print('Not doing batch norm')
 
-        if que_embedding_model == 'RoBERTa'.lower():
+        if que_embedding_model == 'RoBERTa':
             self.que_embedding_model = RobertaModel.from_pretrained('roberta-base')
-        elif que_embedding_model == 'XLNet'.lower():
+        elif que_embedding_model == 'XLNet':
             self.que_embedding_model = XLNetModel.from_pretrained('xlnet-base-cased')
-        elif que_embedding_model == 'ALBERT'.lower():
+        elif que_embedding_model == 'ALBERT':
             self.que_embedding_model = AlbertModel.from_pretrained('albert-base-v2')
-        elif que_embedding_model == 'SentenceTransformer'.lower():
+        elif que_embedding_model == 'SentenceTransformer':
             self.que_embedding_model = AutoModel.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
-        elif que_embedding_model == 'Reformer'.lower():
+        elif que_embedding_model == 'Reformer':
             self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-crime-and-punishment')
         else:
             print('Incorrect question embeddding model specified:', que_embedding_model)
