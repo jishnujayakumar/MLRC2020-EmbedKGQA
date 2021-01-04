@@ -233,8 +233,7 @@ class RelationExtractor(nn.Module):
     def getQuestionEmbedding(self, question_tokenized, attention_mask):
         last_hidden_states = self.que_embedding_model(
                                     question_tokenized, 
-                                    attention_mask=attention_mask)
-                                    .last_hidden_state
+                                    attention_mask=attention_mask).last_hidden_state
         states = last_hidden_states.transpose(1,0)
         cls_embedding = states[0]
         question_embedding = cls_embedding
