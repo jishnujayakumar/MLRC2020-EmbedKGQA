@@ -235,7 +235,7 @@ class RelationExtractor(nn.Module):
                                     question_tokenized, 
                                     attention_mask=attention_mask).last_hidden_state
         states = last_hidden_states.transpose(1,0)
-        cls_embedding = states[0]
+        cls_embedding = states[0][0]
         question_embedding = cls_embedding
         # question_embedding = torch.mean(last_hidden_states, dim=1)
         return question_embedding
