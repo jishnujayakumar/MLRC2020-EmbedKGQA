@@ -72,15 +72,14 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
         question = f"<s>{question}</s>"
-        encoded_question = self.tokenizer.encode_plus(
-                                question, # Question to encode
-                                add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
-                                max_length = 64,           # Pad & truncate all sentences.
-                                pad_to_max_length = True,
-                                return_attention_mask = True,   # Construct attn. masks.
-                                return_tensors = 'pt'     # Return pytorch tensors.
-                            )
-        return encoded_question['input_ids'], encoded_question['attention_mask']
+        encoded_question = self.tokenizer(
+            question, # Question to encode,
+            add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
+            max_length = 64,           # Pad & truncate all sentences.
+            return_attention_mask = True,   # Construct attn. masks.
+            return_tensors = 'pt'     # Return pytorch tensors.
+        )
+        return encoded_question.input_ids, encoded_question.attention_mask
 
 # def _collate_fn(batch):
 #     print(len(batch))

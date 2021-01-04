@@ -3,4 +3,5 @@ tqdm
 gdown
 prettytable
 transformers==4.1.1
+sentencepiece
 -e git+https://github.com/pytorch/pytorch.git@24ae9b504094937fbc7c24012fbe5c601e024bcd
