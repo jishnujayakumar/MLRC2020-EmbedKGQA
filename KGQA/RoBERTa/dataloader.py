@@ -21,6 +21,7 @@ class DatasetWebQSP(Dataset):
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
         self.tokenizer = self.get_tokenizer(transformer_name)
+        print("TOKENIZER", self.tokenizer)
 
     def get_tokenizer(self, transformer_name):
         if transformer_name == 'RoBERTa':
