@@ -242,10 +242,10 @@ class RelationExtractor(nn.Module):
 
     def forward(self, question_tokenized, attention_mask, p_head, p_tail):   
 
-        print("QE".question_tokenized.shape)
-        print("AM".attention_mask.shape)
-        print("PH".p_head.shape)
-        print("PT".p_tail.shape)
+        print("QE",question_tokenized.shape)
+        print("AM",attention_mask.shape)
+        print("PH",p_head.shape)
+        print("PT",p_tail.shape)
 
         question_embedding = self.getQuestionEmbedding(question_tokenized, attention_mask)
         rel_embedding = self.applyNonLinear(question_embedding)
