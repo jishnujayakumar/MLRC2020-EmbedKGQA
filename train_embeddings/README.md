@@ -20,7 +20,7 @@
 ```bash
 python main.py  --model TuckER \
                 --cuda True \ # CUDA enabled
-                --outfile output_file_name \
+                --outfile <output_file_name> \
                 --valid_steps 1 \
                 --dataset <fbwq_half or fbwq_full> \ #for kg_type:{half, full} use dataset:{fbwq_half, fbwq_full}
                 --num_iterations 5 \

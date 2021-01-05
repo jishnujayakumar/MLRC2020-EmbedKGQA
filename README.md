@@ -15,7 +15,6 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1].
 
 # Get started
-
 ```bash
 # Clone the repo
 git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
@@ -36,10 +35,64 @@ gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 ```
 
+# KG Embedding Training
+- [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md) to train KG embeddings.
+
+# QA Dataset Training
+## For MetaQA
+Change to directory `KGQA/LSTM`. Following is an example command to run the QA training code.
+
+```bash
+python main.py  --mode train 
+                --nb_epochs 100
+                --relation_dim 200
+                --hidden_dim 256
+                --gpu 0 #GPU-ID
+                --freeze 0 
+                --batch_size 64
+                --validate_every 4 
+                --hops <1/2/3> #n-hops
+                --lr 0.0005 
+                --entdrop 0.1 
+                --reldrop 0.2  
+                --scoredrop 0.2
+                --decay 1.0
+                --model <Complex/TuckER> #KGE models
+                --patience 10 
+                --ls 0.0 
+                --use_cuda True #Enable CUDA
+                --kg_type <half/full>
+```
+
+## For WebQuestionsSP
+Change to directory `KGQA/RoBERTa`. Following is an example command to run the QA training code.
+
+```bash
+python main.py  --mode train 
+                --relation_dim 200
+                --que_embedding_model <RoBERTa/ALBERT/XLNet/Reformer/SentenceTransformer>
+                --do_batch_norm 0
+                --gpu 0 #GPU-ID
+                --freeze 1 
+                --batch_size 16 --validate_every 10 
+                --hops <webqsp_half/webqsp_full>
+                --lr 0.00002 
+                --entdrop 0.0 
+                --reldrop 0.0 
+                --scoredrop 0.0
+                --decay 1.0 
+                --model <Complex/TuckER> 
+                --patience 20 
+                --ls 0.0 
+                --l3_reg 0.001 
+                --nb_epochs 200 
+                --outfile <output_file_name>
+```
+
 # Helpful links
-- [Read](https://github.com/malllabiisc/EmbedKGQA#instructions) for details about data and pretrained weights 
-- [Read](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) for details about dataset creation
-- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by Apoorva Saxena
+- [Details](https://github.com/malllabiisc/EmbedKGQA#instructions) about data and pretrained weights.
+- [Details](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) about dataset creation.
+- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by Apoorva Saxena.
 
 
 ### Citation:
