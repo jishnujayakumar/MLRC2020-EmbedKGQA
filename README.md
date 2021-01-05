@@ -1,7 +1,7 @@
 # EmbedKGQA: Reproduction and Ablation Study 
 This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020) for the [ACL 2020](https://acl2020.org/) paper [Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings](https://malllabiisc.github.io/publications/papers/final_embedkgqa.pdf)[1]
 
-# New Additions
+# Ablation Study
 - Knowledge Graph Embedding model
      - TuckER
 - Question embedding models
