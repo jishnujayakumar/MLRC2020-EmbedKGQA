@@ -14,22 +14,13 @@
 ### For MetaQA Dataset
 
 ```bash
-#kg_type: half, gpu-mode:enabled
+#GPU-mode:enabled
 python main.py  --model TuckER \
                 --cuda True \
-                --outfile TuckER.fbwq_half \
+                --outfile output_file_name \
                 --valid_steps 1 \
-                --dataset fbwq_half --num_iterations 5 \
-                --batch_size 256 \
-                --l3_reg .00001
-```
-```bash
-#kg_type: full
-python main.py  --model TuckER \
-                --cuda True \
-                --outfile TuckER.fbwq_full \
-                --valid_steps 1 \
-                --dataset fbwq_full --num_iterations 5 \
+                --dataset <fbwq_half or fbwq_full> \ #for kg_type:half use dataset:fbwq_half, #for kg_type:full use dataset:fbwq_full
+                --num_iterations 5 \
                 --batch_size 256 \
                 --l3_reg .00001
 ```
