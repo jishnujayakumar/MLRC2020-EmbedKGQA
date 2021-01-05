@@ -8,7 +8,7 @@
     ```
 - Please tune the hyperparameters according to your need. If needed, add more parameters from [here](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/main.py#L312).
 - Tests have been performed on the following models
-    - ComplEx: Pretrained-model have been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
+    - ComplEx: Pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
     - TuckER: Training has been performed.
 - Other supported types include: 
     - DistMult
