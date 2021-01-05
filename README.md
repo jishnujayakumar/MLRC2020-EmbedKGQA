@@ -35,14 +35,13 @@ gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 ```
 
-# KG Embedding Training
-- [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md) to train KG embeddings.
+# Train KG Embeddings
+[Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md) to train KG embeddings.
 
-# QA Dataset Training
+# Train QA Datasets
 ## For MetaQA
 ```bash
-cd $EMBED_KGQA_DIR/KGQA/LSTM
-
+cd $EMBED_KGQA_DIR/KGQA/LSTM;
 python main.py  --mode train 
                 --nb_epochs 100
                 --relation_dim 200
@@ -66,8 +65,7 @@ python main.py  --mode train
 
 ## For WebQuestionsSP
 ```bash
-cd $EMBED_KGQA_DIR/KGQA/RoBERTa
-
+cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train 
                 --relation_dim 200
                 --que_embedding_model <RoBERTa/ALBERT/XLNet/Reformer/SentenceTransformer>
