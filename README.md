@@ -34,6 +34,9 @@ chmod -R 700 scripts/
 
 # Download and unzip, data and pretrained_models
 ./scripts/download_artifacts.sh
+
+# Install LibKGE
+./scripts/install_libkge.sh
 ```
 
 # Train KG Embeddings
