@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BASEDIR=`$EMBED_KGQA_DIR/data`
 

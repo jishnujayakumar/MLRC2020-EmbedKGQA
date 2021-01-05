@@ -10,7 +10,8 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 
 
 # Helpful pointers
-- Docker Image: [Cuda-Python](https://hub.docker.com/r/qts8n/cuda-python/) can be used. Use the `runtime` tag.
+- Docker Image: [Cuda-Python[2]](https://hub.docker.com/r/qts8n/cuda-python/) can be used. Use the `runtime` tag.
+- The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This can vary w.r.t. [1].
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1]
 
 # Get started
@@ -21,6 +22,9 @@ git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
 cd MLRC2020-EmbedKGQA/ && pip install -r requirements.txt
 mkdir -p checkpoints/ MLRC2020-EmbedKGQA/KGQA/RoBERTa/results/
 
+# Change script permissions
+chmod -R 700 scripts/
+
 # Set a new env variable called EMBED_KGQA_DIR with MLRC2020-EmbedKGQA/ directory's absolute path as value
 # If using bash shell, use 
 echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
@@ -30,11 +34,6 @@ echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
 # gdown requires anyone with the link id; right click on each file and get it 
 gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
-
-# Retrieve and install project in development mode
-git clone https://github.com/uma-pi1/kge.git && cd kge
-git checkout 6d8f7404b5046ad76b6aa3968922ba2c00c81480 && pip install -e .
-cpcd -
 
 # use pretrained KG embeddings or train from scratch
 # To-Do
