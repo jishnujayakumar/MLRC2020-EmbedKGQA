@@ -39,7 +39,7 @@ gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md) to train KG embeddings.
 
 # Train QA Datasets
-## For MetaQA
+## MetaQA
 ```bash
 cd $EMBED_KGQA_DIR/KGQA/LSTM;
 python main.py  --mode train 
@@ -63,7 +63,7 @@ python main.py  --mode train
                 --kg_type <half/full>
 ```
 
-## For WebQuestionsSP
+## WebQuestionsSP
 ```bash
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train 

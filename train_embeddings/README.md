@@ -1,4 +1,4 @@
-# Training Knowledge Graph Embedding Models 
+# Steps to train Knowledge Graph Embedding Models 
 
 ### **NOTE:**
 - First, make sure to complete all the steps mentioned in [getting-started](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA#get-started) section.
@@ -15,7 +15,7 @@
     - SimplE
     - RESCAL  
 
-### For MetaQA KG Dataset
+### Train MetaQA KG
 
 ```bash
 python main.py  --model TuckER \
@@ -28,7 +28,7 @@ python main.py  --model TuckER \
                 --l3_reg .00001
 ```
 
-### For WebQSP KG Dataset
+### Train WebQuestionsSP KG
 
 ```bash
 #for kg_type:{half, full} use config_suffix:{half, full}
