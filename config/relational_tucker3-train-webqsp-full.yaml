@@ -5,7 +5,7 @@ model: relational_tucker3
 
 train:
   max_epochs: 20
-  num_workers: 20
+  num_workers: 15
 
   optimizer.default:
     type: Adagrad
