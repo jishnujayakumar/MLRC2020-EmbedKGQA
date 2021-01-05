@@ -11,6 +11,7 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 
 # Helpful pointers
 - Docker Image: [Cuda-Python](https://hub.docker.com/r/qts8n/cuda-python/) can be used. Use the `runtime` tag.
+- `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1]
 
 # Get started
 
@@ -33,11 +34,11 @@ gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 # Retrieve and install project in development mode
 git clone https://github.com/uma-pi1/kge.git
 cd kge && pip install -e .
+mkdir data/ && cd -
 
 # use pretrained KG embeddings or train from scratch
 # To-Do
 ```
-
 
 # Helpful links
 - [Read](https://github.com/malllabiisc/EmbedKGQA#instructions) for details about data and pretrained weights 
