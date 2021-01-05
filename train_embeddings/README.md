@@ -14,9 +14,8 @@
 ### For MetaQA Dataset
 
 ```bash
-#GPU-mode:enabled
 python main.py  --model TuckER \
-                --cuda True \
+                --cuda True \ # CUDA enabled
                 --outfile output_file_name \
                 --valid_steps 1 \
                 --dataset <fbwq_half or fbwq_full> \ #for kg_type:{half, full} use dataset:{fbwq_half, fbwq_full}
