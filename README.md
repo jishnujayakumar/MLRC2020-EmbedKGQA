@@ -3,12 +3,12 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 
 # Ablation Study
 - Knowledge Graph Embedding model
-     - TuckER
+     - [TuckER](https://arxiv.org/abs/1902.00898)
 - Question embedding models
-    - ALBERT
-    - XLNet
-    - Reformer
-    - SentenceTransformer
+    - [ALBERT](https://arxiv.org/abs/1909.11942)
+    - [XLNet](https://arxiv.org/abs/1906.08237)
+    - [Reformer](https://arxiv.org/abs/2001.04451)
+    - [SentenceBERT](https://arxiv.org/abs/1908.10084) (SentenceTransformer)
 
 # Requirements
 - Python >= 3.7.5, pip
