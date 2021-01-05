@@ -2,7 +2,7 @@
 
 BASEDIR=`$EMBED_KGQA_DIR/data`
 
-for webqsp_dataset in {'fbwq_half', 'fbwq_full'}; 
+for webqsp_dataset in {'fbwq_half', 'fbwq_full'}
 do
     if [ ! -d "$BASEDIR/$webqsp_dataset" ]; then
         echo "\"$webqsp_dataset\" dataset not found. Kindly download it by following steps mentioned in getting-started section [README]."
