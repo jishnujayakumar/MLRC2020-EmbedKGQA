@@ -13,12 +13,16 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Requirements
 - Python >= 3.7.5, pip
 - zip, unzip
+- Docker (Recommended)
 - Pytorch version [1.3.0a0+24ae9b5](https://github.com/pytorch/pytorch/tree/24ae9b504094937fbc7c24012fbe5c601e024bcd). For more info, visit [here](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_19-10.html).
 - Huggingface == 4.1.1 [For new transformers like Reformer]
 
 
 # Helpful pointers
 - Docker Image: [Cuda-Python[2]](https://hub.docker.com/r/qts8n/cuda-python/) can be used. Use the `runtime` tag.
+    - ```bash
+      docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 qts8n/cuda-python:runtime
+      ```
 - The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This may vary w.r.t. [1].
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1].
 
