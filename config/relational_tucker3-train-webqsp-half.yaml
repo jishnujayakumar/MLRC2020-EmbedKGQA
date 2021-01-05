@@ -1,4 +1,5 @@
 job.type: train
+job.device: 'cuda:1'
 dataset.name: fbwq_half 
 model: relational_tucker3
 
