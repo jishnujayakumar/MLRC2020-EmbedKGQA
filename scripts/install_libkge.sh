@@ -7,3 +7,6 @@ pip install -e .
 
 cp $EMBED_KGQA_DIR/scripts/preprocess_webqsp_dataset.sh data
 cp -R $EMBED_KGQA_DIR/data/fbwq_* data
+
+#Run kge training
+

@@ -26,4 +26,4 @@ train:
     args:
       lr: 0.1
       weight_decay: 0.4e-7
-  batch_size: 512
+  batch_size: 128

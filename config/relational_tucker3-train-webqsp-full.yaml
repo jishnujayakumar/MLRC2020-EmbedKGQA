@@ -14,7 +14,7 @@ relational_tucker3:
     regularize: 'lp'
     regularize_weight: 6e-16
     base_embedder:
-      dim: 200
+      dim: 128
       dropout: 0.3
       regularize: 'lp'
       regularize_weight: 6e-12
@@ -26,4 +26,4 @@ train:
     args:
       lr: 0.1
       weight_decay: 0.4e-7
-  batch_size: 512
+  batch_size: 128
