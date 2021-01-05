@@ -4,4 +4,4 @@ gdown==3.12.2
 prettytable==2.0.0
 transformers==4.1.1
 sentencepiece==0.1.94
-torch==1.7.1
+-e git+https://github.com/pytorch/pytorch.git@24ae9b504094937fbc7c24012fbe5c601e024bcd
