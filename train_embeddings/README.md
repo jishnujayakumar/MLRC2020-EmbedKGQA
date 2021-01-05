@@ -6,7 +6,7 @@
   - ```bash 
     cd $EMBED_KGQA_DIR/train_embeddings/
     ```
-- Please tune the hyperparameters according to your need. If needed, add more parameters from [here](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/main.py#L312).
+- Please tune the hyperparameters according to your need. If needed, add more parameters from [here](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/main.py).
 - Tests have been performed on the following models
     - ComplEx: A pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
     - TuckER: For this, training has been performed.
@@ -35,7 +35,8 @@ python main.py  --model TuckER \
 kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml
 ```
 
-- This scheme is used as suggested by [1]'s author. See [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
-- After training, get the checkpoint and entity.del file to be used for training WebQSP QA dataset. 
-- If you need any further help regarding the `kge` tool, visit [Github: LibKGE](https://github.com/uma-pi1/kge).
+- This scheme is used as suggested by [1]'s author. View [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
+- Feel free to try out different parameters mentioned in config/*.yaml as per your need.
+- After training, get the checkpoint `(*.pt)` and `entity.del` files to be used for training WebQSP QA dataset. 
+- See [LibKGE](https://github.com/uma-pi1/kge) for more details regarding the `kge` tool.
 

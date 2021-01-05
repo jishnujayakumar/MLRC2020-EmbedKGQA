@@ -34,12 +34,6 @@ echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
 # gdown requires anyone with the link id; right click on each file and get it 
 gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
-
-# use pretrained KG embeddings or train from scratch
-# To-Do
-
-Feel free to try out different parameters mentioned in config/*.yaml as per your need.
-See [LibKGE](https://) for more details
 ```
 
 # Helpful links
