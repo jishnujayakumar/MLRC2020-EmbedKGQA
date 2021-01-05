@@ -31,5 +31,10 @@ python main.py  --model TuckER \
 ### For WebQSP Dataset
 
 ```bash
-To be written
+kge $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml #for kg_type:{half, full} use config_suffix:{half, full}
+```
+
+```bash
+kge $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-full.yaml
+
 ```
