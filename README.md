@@ -31,29 +31,7 @@ git clone https://github.com/uma-pi1/kge.git
 cd kge && pip install -e .
 
 # use pretrained KG embeddings or train from scratch
-
-```bash
-# kg_type: half
-for i in {1,2,3}; 
-do
-echo "Training $i-hop half";
-python main.py --mode train --nb_epochs 100 --relation_dim 200 --hidden_dim 256 \
---gpu 0 --freeze 0 --batch_size 64 --validate_every 4 --hops $i --lr 0.0005 --entdrop 0.1 --reldrop 0.2  --scoredrop 0.2 \
---decay 1.0 --model <model-name> --patience 10 --ls 0.0 --use_cuda True --kg_type half;
-done;
-```
-
-```bash
-#kg_type: full
-for i in {1,2,3}; 
-do
-echo "Training $i-hop full"
-python main.py --mode train --nb_epochs 100 --relation_dim 200 --hidden_dim 256 \
---gpu 1 --freeze 0 --batch_size 64 --validate_every 4 --hops $i --lr 0.0005 --entdrop 0.1 --reldrop 0.2  --scoredrop 0.2 \
---decay 1.0 --model TuckER --patience 10 --ls 0.0 --use_cuda True --kg_type full
-done;
-```
-
+# To-Do
 ```
 
 
