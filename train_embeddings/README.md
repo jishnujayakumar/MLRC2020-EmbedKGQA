@@ -11,8 +11,6 @@
     - SimplE
     - RESCAL  
 
-<br>
-
 ### For MetaQA Dataset
 
 ```bash
