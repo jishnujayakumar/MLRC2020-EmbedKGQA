@@ -1,7 +1,7 @@
 # Knowledge Graph Embedding training
 
 ### **NOTE:**
-- First, make sure to complete all the steps in [getting-started](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA#get-started) section.
+- First, make sure to complete all the steps mentioned in [getting-started](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA#get-started) section.
 - Make sure to be in **MLRC2020-EmbedKGQA/train_embeddings** directory.
   - ```bash 
     cd $EMBED_KGQA_DIR/train_embeddings/
