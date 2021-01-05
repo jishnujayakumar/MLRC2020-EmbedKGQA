@@ -31,7 +31,8 @@ python main.py  --model TuckER \
 ### For WebQSP KG Dataset
 
 ```bash
-kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml #for kg_type:{half, full} use config_suffix:{half, full}
+#for kg_type:{half, full} use config_suffix:{half, full}
+kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml
 ```
 
 - This scheme is used as suggested by [1]'s author. See [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
