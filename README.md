@@ -40,9 +40,9 @@ gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 
 # QA Dataset Training
 ## For MetaQA
-Change to directory `KGQA/LSTM`. Following is an example command to run the QA training code.
-
 ```bash
+cd $EMBED_KGQA_DIR/KGQA/LSTM
+
 python main.py  --mode train 
                 --nb_epochs 100
                 --relation_dim 200
@@ -65,9 +65,9 @@ python main.py  --mode train
 ```
 
 ## For WebQuestionsSP
-Change to directory `KGQA/RoBERTa`. Following is an example command to run the QA training code.
-
 ```bash
+cd $EMBED_KGQA_DIR/KGQA/RoBERTa
+
 python main.py  --mode train 
                 --relation_dim 200
                 --que_embedding_model <RoBERTa/ALBERT/XLNet/Reformer/SentenceTransformer>
