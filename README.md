@@ -20,6 +20,13 @@ git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
 cd MLRC2020-EmbedKGQA/ && pip install -r requirements.txt
 mkdir -p checkpoints/ MLRC2020-EmbedKGQA/KGQA/RoBERTa/results/
 
+# set a new env variable called EMBED_KGQA_DIR with current directory path as value
+# If using bash shell, use 
+echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile
+source ~/.bash_profile
+
+
+
 # Download and unzip data and pretrained_models
 # Google frive folder: https://drive.google.com/drive/folders/1RlqGBMo45lTmWz9MUPTq-0KcjSd3ujxc
 # gdown requires anyone with the link id; right click on each file and get it 
