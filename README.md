@@ -32,9 +32,9 @@ gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
 gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
 
 # Retrieve and install project in development mode
-git clone https://github.com/uma-pi1/kge.git
-cd kge && pip install -e .
-mkdir data/ && cd -
+git clone https://github.com/uma-pi1/kge.git && cd kge
+git checkout 6d8f7404b5046ad76b6aa3968922ba2c00c81480 && pip install -e .
+cpcd -
 
 # use pretrained KG embeddings or train from scratch
 # To-Do
