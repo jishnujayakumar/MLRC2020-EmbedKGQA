@@ -19,7 +19,7 @@ python main.py  --model TuckER \
                 --cuda True \
                 --outfile output_file_name \
                 --valid_steps 1 \
-                --dataset <fbwq_half or fbwq_full> \ #for kg_type:half use dataset:fbwq_half, #for kg_type:full use dataset:fbwq_full
+                --dataset <fbwq_half or fbwq_full> \ #for kg_type:{half, full} use dataset:{fbwq_half, fbwq_full}
                 --num_iterations 5 \
                 --batch_size 256 \
                 --l3_reg .00001
