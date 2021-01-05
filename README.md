@@ -11,7 +11,7 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 
 # Helpful pointers
 - Docker Image: [Cuda-Python[2]](https://hub.docker.com/r/qts8n/cuda-python/) can be used. Use the `runtime` tag.
-- The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This can vary w.r.t. [1].
+- The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This may vary w.r.t. [1].
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1]
 
 # Get started
