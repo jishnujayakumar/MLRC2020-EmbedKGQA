@@ -39,5 +39,5 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
 
 - After training, get the checkpoint and entity.del file to be used for training WebQSP QA dataset. 
 
-- If you need any further help regarding the `kge` tool, visit [Github:LibKGE](https://github.com/uma-pi1/kge).
+- If you need any further help regarding the `kge` tool, visit [Github: LibKGE](https://github.com/uma-pi1/kge).
 
