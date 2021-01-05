@@ -15,17 +15,16 @@
 
 ```bash
 #kg_type: half, gpu-mode:enabled
-python main.py --model TuckER --cuda True \
---outfile TuckER.fbwq_half --valid_steps 1 \
---dataset fbwq_half --num_iterations 5 --batch_size 256 \
---l3_reg .00001 #add more parameters if needed
+python main.py --model TuckER --cuda True --outfile TuckER.fbwq_half \
+--valid_steps 1 --dataset fbwq_half --num_iterations 5 \
+--batch_size 256 --l3_reg .00001 #add more parameters if needed
 ```
 ```bash
-#kg_type: half
+#kg_type: full
 python main.py --model TuckER --cuda True \
---outfile TuckER.fbwq_half --valid_steps 1 \
---dataset fbwq_half --num_iterations 5 --batch_size 256 \
---l3_reg .00001 #add more parameters if needed
+--outfile TuckER.fbwq_full \
+--valid_steps 1 --dataset fbwq_full --num_iterations 5 \
+--batch_size 256 --l3_reg .00001 #add more parameters if needed
 ```
 
 ### For WebQSP Dataset
