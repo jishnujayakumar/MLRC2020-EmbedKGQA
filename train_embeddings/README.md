@@ -1,4 +1,4 @@
-# Knowledge Graph Embedding training
+# Training Knowledge Graph Embedding Models 
 
 ### **NOTE:**
 - First, make sure to complete all the steps mentioned in [getting-started](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA#get-started) section.
