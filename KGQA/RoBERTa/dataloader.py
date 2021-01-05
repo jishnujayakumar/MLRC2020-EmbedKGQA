@@ -76,7 +76,7 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
 
         if self.transformer_name == "Reformer":
-            self.tokenize.pad_token = "<pad>"
+            self.tokenizer.pad_token = "<pad>"
             q_encoded_dict = self.tokenizer.encode_plus(
                                 question, 
                                 max_length=2**19,
