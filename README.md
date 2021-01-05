@@ -2,9 +2,8 @@
 This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020) for the [ACL 2020](https://acl2020.org/) paper [Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings](https://malllabiisc.github.io/publications/papers/final_embedkgqa.pdf)[1]
 
 # Requirements
-- Python >= 3.7.5
-- zip
-- unzip
+- Python >= 3.7.5, pip
+- zip, unzip
 - Pytorch version [1.3.0a0+24ae9b5](https://github.com/pytorch/pytorch/tree/24ae9b504094937fbc7c24012fbe5c601e024bcd). For more info, visit [here](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_19-10.html).
 - Huggingface == 4.1.1 [For new transformers like Reformer]
 
