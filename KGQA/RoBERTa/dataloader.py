@@ -20,22 +20,23 @@ class DatasetWebQSP(Dataset):
         self.pos_dict = defaultdict(list)
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
+        self.transformer_name = transformer_name
         self.tokenizer = None
-        self.set_tokenizer(transformer_name)
+        self.set_tokenizer()
 
-    def set_tokenizer(self, transformer_name):
-        if transformer_name == 'RoBERTa':
+    def set_tokenizer(self):
+        if self.transformer_name == 'RoBERTa':
             self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
-        elif transformer_name == 'XLNet':
+        elif self.transformer_name == 'XLNet':
             self.tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
-        elif transformer_name == 'ALBERT':
+        elif self.transformer_name == 'ALBERT':
             self.tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
-        elif transformer_name == 'SentenceTransformer':
+        elif self.transformer_name == 'SentenceTransformer':
             self.tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
-        elif transformer_name == 'Reformer':
+        elif self.transformer_name == 'Reformer':
             self.tokenizer = ReformerTokenizer.from_pretrained('google/reformer-crime-and-punishment')
         else:
-            print('Incorrect transformer specified:', transformer_name)
+            print('Incorrect transformer specified:', self.transformer_name)
             exit(0)
 
     def __len__(self):
@@ -73,22 +74,31 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
         question = f"<s>{question}</s>"
-        question_tokenized = self.tokenizer.tokenize(question)
-        question_tokenized = self.pad_sequence(question_tokenized, 64)
-        question_tokenized = torch.tensor(self.tokenizer.encode(
-                                question, # Question to encode
-                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
-                            ))
 
-        attention_mask = []
-        for q in question_tokenized:
-            # 1 means padding token
-            if q == 1:
-                attention_mask.append(0)
-            else:
-                attention_mask.append(1)
+        if self.transformer_name == "Reformer":
+            q_encoded_dict = torch.tensor(self.tokenizer.encode_plus(
+                                question, 
+                                pad_to_max_length=True, 
+                                max_length=2**19
+                                ))
+            return q_encoded_dict['input_ids'], q_encoded_dict['attention_mask']
+        else:
+            question_tokenized = self.tokenizer.tokenize(question)
+            question_tokenized = self.pad_sequence(question_tokenized, 64)
+            question_tokenized = torch.tensor(self.tokenizer.encode(
+                                    question, # Question to encode
+                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                   ))
 
-        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+            attention_mask = []
+            for q in question_tokenized:
+                # 1 means padding token
+                if q == 1:
+                    attention_mask.append(0)
+                else:
+                    attention_mask.append(1)
+
+            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
 # def _collate_fn(batch):
 #     print(len(batch))
