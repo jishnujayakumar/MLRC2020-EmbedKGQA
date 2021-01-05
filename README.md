@@ -96,7 +96,7 @@ python main.py  --mode train
 # Helpful links
 - [Details](https://github.com/malllabiisc/EmbedKGQA#instructions) about data and pretrained weights.
 - [Details](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) about dataset creation.
-- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by Apoorva Saxena.
+- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by [Apoorva Saxena](https://apoorvumang.github.io/).
 
 
 ### Citation:
