@@ -76,33 +76,25 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
 
         if self.transformer_name == "Reformer":
-            self.tokenizer.pad_token = "<pad>"
-            q_encoded_dict = self.tokenizer.encode_plus(
-                                question, 
-                                max_length=2**19,
-                                pad_to_max_length = True,
-                                add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
-                                return_attention_mask = True,   # Construct attn. masks.
-                                return_tensors = 'pt',     # Return pytorch tensors.
-                            )
-            return q_encoded_dict['input_ids'], q_encoded_dict['attention_mask']
+            max_length = 2**19
         else:
-            question_tokenized = self.tokenizer.tokenize(question)
-            question_tokenized = self.pad_sequence(question_tokenized, 64)
-            question_tokenized = torch.tensor(self.tokenizer.encode(
-                                    question, # Question to encode
-                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
-                                   ))
+            max_length = 64
+        question_tokenized = self.tokenizer.tokenize(question)
+        question_tokenized = self.pad_sequence(question_tokenized, max_length)
+        question_tokenized = torch.tensor(self.tokenizer.encode(
+                                question, # Question to encode
+                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                ))
 
-            attention_mask = []
-            for q in question_tokenized:
-                # 1 means padding token
-                if q == 1:
-                    attention_mask.append(0)
-                else:
-                    attention_mask.append(1)
+        attention_mask = []
+        for q in question_tokenized:
+            # 1 means padding token
+            if q == 1:
+                attention_mask.append(0)
+            else:
+                attention_mask.append(1)
 
-            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
 # def _collate_fn(batch):
 #     print(len(batch))
