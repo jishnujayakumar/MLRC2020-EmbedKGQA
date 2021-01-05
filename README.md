@@ -62,7 +62,7 @@ python main.py  --mode train
                 --reldrop 0.2  
                 --scoredrop 0.2
                 --decay 1.0
-                --model <Complex/TuckER> #KGE models
+                --model <ComplEx/TuckER> #KGE models
                 --patience 10 
                 --ls 0.0 
                 --use_cuda True #Enable CUDA
@@ -85,7 +85,7 @@ python main.py  --mode train
                 --reldrop 0.0 
                 --scoredrop 0.0
                 --decay 1.0 
-                --model <Complex/TuckER> 
+                --model <ComplEx/TuckER> 
                 --patience 20 
                 --ls 0.0 
                 --l3_reg 0.001 
