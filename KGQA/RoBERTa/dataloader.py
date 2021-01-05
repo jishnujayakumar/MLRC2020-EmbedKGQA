@@ -76,11 +76,14 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
 
         if self.transformer_name == "Reformer":
-            q_encoded_dict = torch.tensor(self.tokenizer.encode_plus(
+            q_encoded_dict = self.tokenizer.encode_plus(
                                 question, 
-                                pad_to_max_length=True, 
-                                max_length=2**19
-                                ))
+                                padding='max_length', 
+                                max_length=2**19,
+                                add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
+                                return_attention_mask = True,   # Construct attn. masks.
+                                return_tensors = 'pt',     # Return pytorch tensors.
+                            )
             return q_encoded_dict['input_ids'], q_encoded_dict['attention_mask']
         else:
             question_tokenized = self.tokenizer.tokenize(question)
