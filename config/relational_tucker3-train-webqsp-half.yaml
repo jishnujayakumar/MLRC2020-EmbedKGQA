@@ -1,31 +1,20 @@
 job.type: train
 job.device: 'cuda'
-dataset.name: fbwq_half 
+dataset.name: fbwq_half
 model: relational_tucker3
 
-relational_tucker3:
-  entity_embedder:
-    dim: 256
-    dropout: 0.02
-    regularize: 'lp'
-    regularize_weight: 4e-12
-
-  relation_embedder:
-    dim: 200
-    dropout: 0.3
-    regularize: 'lp'
-    regularize_weight: 6e-16
-    base_embedder:
-      dim: 200
-      dropout: 0.3
-      regularize: 'lp'
-      regularize_weight: 6e-12
-
 train:
-  max_epochs: 50
+  max_epochs: 20
+  num_workers: 20
+
   optimizer.default:
     type: Adagrad
     args:
       lr: 0.1
       weight_decay: 0.4e-7
-  batch_size: 32
+  batch_size: 512
+  subbatch_auto_tune: True
+
+valid:
+  every: 1
+  metric: mean_reciprocal_rank_filtered
