@@ -1,6 +1,14 @@
 # EmbedKGQA: Reproduction and Ablation Study 
 This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020) for the [ACL 2020](https://acl2020.org/) paper [Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings](https://malllabiisc.github.io/publications/papers/final_embedkgqa.pdf)[1]
 
+# New Additions
+- TuckER KG embedding model.
+- Question embedding models.
+    - ALBERT
+    - XLNet
+    - Reformer
+    - SentenceTransformer
+
 # Requirements
 - Python >= 3.7.5, pip
 - zip, unzip
@@ -16,29 +24,24 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 # Get started
 ```bash
 # Clone the repo
-git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA
-cd MLRC2020-EmbedKGQA/ && pip install -r requirements.txt
-mkdir -p checkpoints/ MLRC2020-EmbedKGQA/KGQA/RoBERTa/results/
+git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA && cd "$_"
 
 # Change script permissions
 chmod -R 700 scripts/
 
-# Set a new env variable called EMBED_KGQA_DIR with MLRC2020-EmbedKGQA/ directory's absolute path as value
-# If using bash shell, use 
-echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
+# Initial setup
+./scripts/initial_setup.sh
 
-# Download and unzip data and pretrained_models
-# Google frive folder: https://drive.google.com/drive/folders/1RlqGBMo45lTmWz9MUPTq-0KcjSd3ujxc
-# gdown requires anyone with the link id; right click on each file and get it 
-gdown --id 1uWaavrpKKllVSQ73TTuLWPc4aqVvrkpx && unzip data.zip
-gdown --id 1Ly_3RR1CsYDafdvdfTG35NPIG-FLH-tz && unzip pretrained_models.zip
+# Download and unzip, data and pretrained_models
+./scripts/download_artifacts.sh
 ```
 
 # Train KG Embeddings
 [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md) to train KG embeddings.
 
 # Train QA Datasets
-## MetaQA
+Hyperparameters in the following commands are set w.r.t. [[1]](https://github.com/malllabiisc/EmbedKGQA#metaqa).
+### MetaQA
 ```bash
 cd $EMBED_KGQA_DIR/KGQA/LSTM;
 python main.py  --mode train 
@@ -62,7 +65,7 @@ python main.py  --mode train
                 --kg_type <half/full>
 ```
 
-## WebQuestionsSP
+### WebQuestionsSP
 ```bash
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train 
