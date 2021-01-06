@@ -82,10 +82,14 @@ class DatasetWebQSP(Dataset):
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
                 max_length = 2**19,  # maximum length of a question
-                pad_to_max_length=True,  # Add [PAD]s
+                padding=True,   # Add [PAD]s
                 return_attention_mask = True,  # Generate the attention mask
                 return_tensors = 'pt',  # ask the function to return PyTorch tensors
             )
+
+
+            print('input_ids', encoded['input_ids'].shape)
+            print('attention_mask',encoded['attention_mask'].shape)
 
             # Get the input IDs and attention mask in tensor format
             return encoded['input_ids'], encoded['attention_mask']
