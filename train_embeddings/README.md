@@ -27,7 +27,7 @@ python main.py  --model TuckER \
                 --batch_size 256 \
                 --l3_reg .00001
 ```
-
+- **Output path**: `$EMBED_KGQA_DIR/checkpoints/MetaQA/....`
 ### Train WebQuestionsSP KG
 
 ```bash
