@@ -8,7 +8,7 @@ def get_pretrained_model_name(transformer_name):
         elif transformer_name == 'SentenceTransformer':
             return 'sentence-transformers/bert-base-nli-mean-tokens'
         elif transformer_name == 'Reformer':
-            return 'google/reformer-enwik8'
+            return 'google/reformer-crime-and-punishment'
         else:
             print('Incorrect pretrained model name specified:', transformer_name)
             exit(0)
