@@ -77,6 +77,7 @@ class DatasetWebQSP(Dataset):
 
         # Encode the sentence
         if self.transformer_name == "Reformer":
+            self.tokenizer.add_special_tokens({'pad_token': '<pad>'})
             encoded = self.tokenizer.encode_plus(
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
