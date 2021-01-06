@@ -232,22 +232,14 @@ class RelationExtractor(nn.Module):
 
     
     def getQuestionEmbedding(self, question_tokenized, attention_mask):
-        if self.que_embedding_model == "SentenceTransformer":
-            #Compute token embeddings
-            with torch.no_grad():
-                model_output = self.que_embedding_model(question_tokenized, attention_mask)
-            #Perform pooling. In this case, mean pooling
-            question_embedding = mean_pooling(model_output, attention_mask)
-            return question_embedding
-        else:
-            last_hidden_states = self.que_embedding_model(
-                                    question_tokenized, 
-                                    attention_mask=attention_mask).last_hidden_state
-            states = last_hidden_states.transpose(1,0)
-            cls_embedding = states[0]
-            question_embedding = cls_embedding
-            question_embedding = torch.mean(last_hidden_states, dim=1)
-            return question_embedding
+        last_hidden_states = self.que_embedding_model(
+                                question_tokenized, 
+                                attention_mask=attention_mask).last_hidden_state
+        states = last_hidden_states.transpose(1,0)
+        cls_embedding = states[0]
+        question_embedding = cls_embedding
+        question_embedding = torch.mean(last_hidden_states, dim=1)
+        return question_embedding
 
     def forward(self, question_tokenized, attention_mask, p_head, p_tail):
         question_embedding = self.getQuestionEmbedding(question_tokenized, attention_mask)
