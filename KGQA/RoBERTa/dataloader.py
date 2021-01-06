@@ -88,11 +88,11 @@ class DatasetWebQSP(Dataset):
             )
 
 
-            print('input_ids', encoded['input_ids'][0].shape)
-            print('attention_mask',encoded['attention_mask'][0].shape)
+            # print('input_ids', encoded['input_ids'][0].shape)
+            # print('attention_mask',encoded['attention_mask'][0].shape)
 
             # Get the input IDs and attention mask in tensor format
-            return encoded['input_ids'][0], encoded['attention_mask'][0]
+            return encoded['input_ids'], encoded['attention_mask']
         else:
             question_tokenized = self.tokenizer.tokenize(question)
             question_tokenized = self.pad_sequence(question_tokenized, max_length)
