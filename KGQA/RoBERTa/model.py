@@ -32,7 +32,8 @@ class RelationExtractor(nn.Module):
         elif que_embedding_model == 'SentenceTransformer':
             self.que_embedding_model = AutoModel.from_pretrained(self.pre_trained_model_name)
         elif que_embedding_model == 'Reformer':
-            config = ReformerConfig.from_pretrained(self.pre_trained_model_name)
+            # config = ReformerConfig.from_pretrained(self.pre_trained_model_name)
+            config = ReformerConfig()
             config.max_position_embeddings = 64 #To be uninform with other transformer models
             config.axial_pos_shape=[8,16]
             self.que_embedding_model = ReformerModel.from_pretrained(self.pre_trained_model_name, config=config)
