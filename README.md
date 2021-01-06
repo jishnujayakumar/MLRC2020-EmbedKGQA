@@ -7,7 +7,7 @@ This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020)
 - Question embedding models
     - [ALBERT](https://arxiv.org/abs/1909.11942)
     - [XLNet](https://arxiv.org/abs/1906.08237)
-    - [Reformer](https://arxiv.org/abs/2001.04451)
+    - [Longformer](https://arxiv.org/abs/2004.05150)
     - [SentenceBERT](https://arxiv.org/abs/1908.10084) (SentenceTransformer)
 
 # Requirements
@@ -86,7 +86,7 @@ python main.py  --mode train
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train 
                 --relation_dim 200
-                --que_embedding_model <RoBERTa/ALBERT/XLNet/Reformer/SentenceTransformer>
+                --que_embedding_model <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer>
                 --do_batch_norm 0
                 --gpu 0 #GPU-ID
                 --freeze 1 

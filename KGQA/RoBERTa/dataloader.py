@@ -34,8 +34,8 @@ class DatasetWebQSP(Dataset):
             self.tokenizer = AlbertTokenizer.from_pretrained(self.pre_trained_model_name)
         elif self.transformer_name == 'SentenceTransformer':
             self.tokenizer = AutoTokenizer.from_pretrained(self.pre_trained_model_name)
-        elif self.transformer_name == 'Reformer':
-            self.tokenizer = ReformerTokenizer.from_pretrained(self.pre_trained_model_name)
+        elif self.transformer_name == 'Longformer':
+            self.tokenizer = LongformerTokenizer.from_pretrained(self.pre_trained_model_name)
         else:
             print('Incorrect transformer specified:', self.transformer_name)
             exit(0)
@@ -77,19 +77,19 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
 
         # Encode the sentence
-        if self.transformer_name == "Reformer":
+        if self.transformer_name == "Longformer":
             self.tokenizer.add_special_tokens({'pad_token': '<pad>'})
             encoded_que = self.tokenizer.encode_plus(
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
-                max_length = 8*16,  # maximum length of a question
+                max_length = 64,  # maximum length of a question
                 padding='max_length',   # Add [PAD]s
                 return_attention_mask = True,  # Generate the attention mask
                 return_tensors = 'pt',  # ask the function to return PyTorch tensors
             )
 
             # Get the input IDs and attention mask in tensor format
-            return encoded_que['input_ids'][0], encoded_que['attention_mask'][0]
+            return encoded_que['input_ids'].unsqueeze(0), encoded_que['attention_mask'].unsqueeze(0)
         else:
             question_tokenized = self.tokenizer.tokenize(question)
             question_tokenized = self.pad_sequence(question_tokenized, max_length)
