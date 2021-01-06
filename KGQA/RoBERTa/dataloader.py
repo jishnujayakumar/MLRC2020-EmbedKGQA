@@ -76,22 +76,33 @@ class DatasetWebQSP(Dataset):
     def tokenize_question(self, question):
         question = f"<s>{question}</s>"
         max_length = 64
-        question_tokenized = self.tokenizer.tokenize(question)
-        question_tokenized = self.pad_sequence(question_tokenized, max_length)
-        question_tokenized = torch.tensor(self.tokenizer.encode(
-                                question, # Question to encode
-                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
-                                ))
+        if self.transformer_name == "SentenceTransformer":
+            encoded_input = self.tokenizer(question, 
+                                    padding=True, 
+                                    truncation=True, 
+                                    max_length=max_length, 
+                                    return_tensors='pt'
+                                    )
+            
+            return encoded_input['input_ids'], encoded_input['attention_mask']
 
-        attention_mask = []
-        for q in question_tokenized:
-            # 1 means padding token
-            if q == 1:
-                attention_mask.append(0)
-            else:
-                attention_mask.append(1)
+        else:
+            question_tokenized = self.tokenizer.tokenize(question)
+            question_tokenized = self.pad_sequence(question_tokenized, max_length)
+            question_tokenized = torch.tensor(self.tokenizer.encode(
+                                    question, # Question to encode
+                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                    ))
 
-        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+            attention_mask = []
+            for q in question_tokenized:
+                # 1 means padding token
+                if q == 1:
+                    attention_mask.append(0)
+                else:
+                    attention_mask.append(1)
+
+            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
 # def _collate_fn(batch):
 #     print(len(batch))
