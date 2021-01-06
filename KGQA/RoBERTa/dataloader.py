@@ -81,7 +81,7 @@ class DatasetWebQSP(Dataset):
             encoded_que = self.tokenizer.encode_plus(
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
-                max_length = 512,  # maximum length of a question
+                max_length = 64,  # maximum length of a question
                 padding='max_length',   # Add [PAD]s
                 return_attention_mask = True,  # Generate the attention mask
                 return_tensors = 'pt',  # ask the function to return PyTorch tensors

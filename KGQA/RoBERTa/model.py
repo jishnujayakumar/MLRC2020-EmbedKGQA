@@ -32,7 +32,7 @@ class RelationExtractor(nn.Module):
             self.que_embedding_model = AutoModel.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
         elif que_embedding_model == 'Reformer':
             self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-crime-and-punishment')
-            self.que_embedding_model.config.axial_pos_shape=[32, 64] #Questions are small sentences requiring less space
+            self.que_embedding_model.config.axial_pos_shape=[8, 8] #Questions are small sentences requiring less space
         else:
             print('Incorrect question embeddding model specified:', que_embedding_model)
             exit(0)
