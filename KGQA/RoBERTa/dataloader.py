@@ -10,7 +10,7 @@ from collections import defaultdict
 from tqdm import tqdm
 import numpy as np
 from transformers import *
-
+from helpers import *
 
 class DatasetWebQSP(Dataset):
     def __init__(self, data, entities, entity2idx, transformer_name):
@@ -21,20 +21,21 @@ class DatasetWebQSP(Dataset):
         self.neg_dict = defaultdict(list)
         self.index_array = list(self.entities.keys())
         self.transformer_name = transformer_name
+        self.pre_trained_model_name = get_pretrained_model_name(transformer_name)
         self.tokenizer = None
         self.set_tokenizer()
-
+        
     def set_tokenizer(self):
         if self.transformer_name == 'RoBERTa':
-            self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+            self.tokenizer = RobertaTokenizer.from_pretrained(self.pre_trained_model_name)
         elif self.transformer_name == 'XLNet':
-            self.tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
+            self.tokenizer = XLNetTokenizer.from_pretrained(self.pre_trained_model_name)
         elif self.transformer_name == 'ALBERT':
-            self.tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+            self.tokenizer = AlbertTokenizer.from_pretrained(self.pre_trained_model_name)
         elif self.transformer_name == 'SentenceTransformer':
-            self.tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.pre_trained_model_name)
         elif self.transformer_name == 'Reformer':
-            self.tokenizer = ReformerTokenizer.from_pretrained('google/reformer-enwik8')
+            self.tokenizer = ReformerTokenizer.from_pretrained(self.pre_trained_model_name)
         else:
             print('Incorrect transformer specified:', self.transformer_name)
             exit(0)

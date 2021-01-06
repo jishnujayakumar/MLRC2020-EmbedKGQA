@@ -8,6 +8,7 @@ import numpy as np
 from torch.nn.init import xavier_normal_
 from transformers import *
 import random
+from helpers import *
 
 class RelationExtractor(nn.Module):
 
@@ -21,20 +22,20 @@ class RelationExtractor(nn.Module):
         self.do_batch_norm = do_batch_norm
         if not self.do_batch_norm:
             print('Not doing batch norm')
-
+        self.pre_trained_model_name = get_pretrained_model_name(que_embedding_model)
         if que_embedding_model == 'RoBERTa':
-            self.que_embedding_model = RobertaModel.from_pretrained('roberta-base')
+            self.que_embedding_model = RobertaModel.from_pretrained(self.pre_trained_model_name)
         elif que_embedding_model == 'XLNet':
-            self.que_embedding_model = XLNetModel.from_pretrained('xlnet-base-cased')
+            self.que_embedding_model = XLNetModel.from_pretrained(self.pre_trained_model_name)
         elif que_embedding_model == 'ALBERT':
-            self.que_embedding_model = AlbertModel.from_pretrained('albert-base-v2')
+            self.que_embedding_model = AlbertModel.from_pretrained(self.pre_trained_model_name)
         elif que_embedding_model == 'SentenceTransformer':
-            self.que_embedding_model = AutoModel.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
+            self.que_embedding_model = AutoModel.from_pretrained(self.pre_trained_model_name)
         elif que_embedding_model == 'Reformer':
-            config = ReformerConfig()
+            config = ReformerConfig.from_pretrained(self.pre_trained_model_name)
             config.max_position_embeddings = 64 #To be uninform with other transformer models
             config.axial_pos_shape=[8,16]
-            self.que_embedding_model = ReformerModel.from_pretrained('google/reformer-enwik8', config=config)
+            self.que_embedding_model = ReformerModel.from_pretrained(self.pre_trained_model_name, config=config)
         else:
             print('Incorrect question embeddding model specified:', que_embedding_model)
             exit(0)
