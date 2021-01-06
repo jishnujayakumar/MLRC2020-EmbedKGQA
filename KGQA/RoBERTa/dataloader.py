@@ -77,7 +77,7 @@ class DatasetWebQSP(Dataset):
 
         # Encode the sentence
         if self.transformer_name == "Reformer":
-            encoded = tz.encode_plus(
+            encoded = self.tokenizer.encode_plus(
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
                 max_length = 2**19,  # maximum length of a question
