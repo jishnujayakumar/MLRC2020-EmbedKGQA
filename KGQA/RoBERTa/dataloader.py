@@ -78,7 +78,7 @@ class DatasetWebQSP(Dataset):
         # Encode the sentence
         if self.transformer_name == "Reformer":
             self.tokenizer.add_special_tokens({'pad_token': '<pad>'})
-            encoded = self.tokenizer.encode_plus(
+            encoded_que = self.tokenizer.encode_plus(
                 text=question,  # the question to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
                 max_length = 2**19,  # maximum length of a question
@@ -88,11 +88,11 @@ class DatasetWebQSP(Dataset):
             )
 
 
-            # print('input_ids', encoded['input_ids'][0].shape)
-            # print('attention_mask',encoded['attention_mask'][0].shape)
+            print('input_ids', encoded_que['input_ids'][0].shape)
+            print('attention_mask',encoded_que['attention_mask'][0].shape)
 
             # Get the input IDs and attention mask in tensor format
-            return encoded['input_ids'], encoded['attention_mask']
+            return encoded_que['input_ids'][0], encoded_que['attention_mask'][0]
         else:
             question_tokenized = self.tokenizer.tokenize(question)
             question_tokenized = self.pad_sequence(question_tokenized, max_length)
