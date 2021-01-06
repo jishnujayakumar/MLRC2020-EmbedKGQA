@@ -2,7 +2,7 @@ def get_pretrained_model_name(transformer_name):
         if transformer_name == 'RoBERTa':
             return 'roberta-base'
         elif transformer_name == 'XLNet':
-            retur 'xlnet-base-cased'
+            return 'xlnet-base-cased'
         elif transformer_name == 'ALBERT':
             return 'albert-base-v2'
         elif transformer_name == 'SentenceTransformer':
