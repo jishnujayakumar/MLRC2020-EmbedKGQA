@@ -34,7 +34,7 @@ class DatasetWebQSP(Dataset):
         elif self.transformer_name == 'SentenceTransformer':
             self.tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/bert-base-nli-mean-tokens")
         elif self.transformer_name == 'Reformer':
-            self.tokenizer = ReformerTokenizer.from_pretrained('google/reformer-crime-and-punishment')
+            self.tokenizer = ReformerTokenizer.from_pretrained('google/reformer-enwik8')
         else:
             print('Incorrect transformer specified:', self.transformer_name)
             exit(0)
