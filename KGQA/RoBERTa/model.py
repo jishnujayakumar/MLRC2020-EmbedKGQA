@@ -35,6 +35,8 @@ class RelationExtractor(nn.Module):
             config = ReformerConfig.from_pretrained(self.pre_trained_model_name)
             config.max_position_embeddings = 64 #To be uninform with other transformer models
             config.axial_pos_shape=[8,16]
+            config.axial_pos_embds_dim=[64, 64]
+            config.feed_forward_size=8
             self.que_embedding_model = ReformerModel.from_pretrained(self.pre_trained_model_name, config=config)
         else:
             print('Incorrect question embeddding model specified:', que_embedding_model)
