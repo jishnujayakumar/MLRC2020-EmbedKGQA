@@ -77,7 +77,7 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
         max_length = 64
         if self.transformer_name == "SentenceTransformer":
-            encoded_input = tokenizer(question, 
+            encoded_input = self.tokenizer(question, 
                                     padding=True, 
                                     truncation=True, 
                                     max_length=max_length, 
