@@ -32,7 +32,8 @@ python main.py  --model TuckER \
 
 ```bash
 #for kg_type:{half, full} use config_suffix:{half, full}
-kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml
+kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml \
+--job.device cuda:<gpu-id>
 ```
 - **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/....`
 - This scheme is used as suggested by [1]'s author. View [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
