@@ -30,31 +30,23 @@ python main.py  --model TuckER \
 - **Output path**: `$EMBED_KGQA_DIR/kg_embeddings/MetaQA/....`
 
 - After training the respective MetaQA KG dataset, place the output to predefined path to train the QA dataset
-    -   For MetaQA_half dataset
-        -   ```bash
-            # For MetaQA_half dataset
-            # Predefined path to store the necessary KGE training output files
-            # to be used for training QA dataset
-            destination_path="EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/"
-            
-            # Make the required directory
-            mkdir -p $destination_path
-            
-            # Copy to predefined location
-            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/* $destination_path
-            ```
-    -   For MetaQA dataset
-        -   ```bash
-            # Predefined path to store the necessary KGE training output files
-            # to be used for training QA dataset
-            destination_path="$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/"
-            
-            # Make the required directory
-            mkdir -p $destination_path
-            
-            # Copy to predefined location
-            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA/* $destination_path
-            ```
+    -   ```bash
+        # For MetaQA_half dataset
+        # dataset-name-1=MetaQA_half, dataset-name-2=MetaQA_half
+
+        # For MetaQA dataset
+        # dataset-name-1=MetaQA_full, dataset-name-2=MetaQA
+        
+        # Predefined path to store the necessary KGE training output files
+        # to be used for training QA dataset
+        destination_path="EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name-1>/"
+        
+        # Make the required directory
+        mkdir -p $destination_path
+        
+        # Copy to predefined location
+        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name-2>/* $destination_path
+        ```
 ### Train WebQuestionsSP KG
 
 ```bash
