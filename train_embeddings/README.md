@@ -15,8 +15,6 @@
     - SimplE
     - RESCAL  
 
-- TODO: After training respective QA dataset set the outputs to `$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset_name>/`
-
 ### Train MetaQA KG
 
 ```bash
@@ -29,7 +27,14 @@ python main.py  --model TuckER \
                 --batch_size 256 \
                 --l3_reg .00001
 ```
-- **Output path**: `$EMBED_KGQA_DIR/checkpoints/MetaQA/....`
+- **Output path**: `$EMBED_KGQA_DIR/kg_embeddings/MetaQA/....`
+
+- After training respective MetaQA dataset place the outputs to 
+    -   ```bash
+        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
+
+        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
+        ```
 ### Train WebQuestionsSP KG
 
 ```bash
@@ -38,6 +43,14 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
 --job.device cuda:<gpu-id>
 ```
 - **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/....`
+
+- After training respective WebQSP dataset place the outputs to 
+    -   ```bash
+        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
+
+        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
+        ```
+
 - This scheme is used as suggested by [1]'s author. View [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
 - Feel free to try out different parameters mentioned in config/*.yaml as per your need.
 - After training, get the checkpoint `(*.pt)` and `entity.del` files to be used for training WebQSP QA dataset. 
