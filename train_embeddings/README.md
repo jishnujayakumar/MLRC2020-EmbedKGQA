@@ -15,6 +15,8 @@
     - SimplE
     - RESCAL  
 
+- ToDo: After training respective QA dataset set the outputs to `$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset_name>/`
+
 ### Train MetaQA KG
 
 ```bash
