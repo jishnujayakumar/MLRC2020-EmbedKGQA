@@ -29,7 +29,7 @@ python main.py  --model TuckER \
 ```
 - **Output path**: `$EMBED_KGQA_DIR/kg_embeddings/MetaQA/....`
 
-- After training the respective MetaQA dataset, place the output to 
+- After training the respective MetaQA KG dataset, place the output to predined path to train the QA dataset
     -   ```bash
         # For MetaQA_half dataset
         cp -R \
@@ -50,7 +50,7 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
 ```
 - **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/....`
 
-- After training the respective WebQSP dataset, place the output to 
+- After training the respective WebQSP KG dataset, place the output to predined path to train the QA dataset
     -   ```bash
         # NOTE: For dataset-name:{fbwq_half, fbwq_full}, kg-type:{half, full}
 
