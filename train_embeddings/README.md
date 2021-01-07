@@ -57,7 +57,8 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
         $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name>/ \
         $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
 
-        # Find the best checkpoint and copy to predefined path for training QA dataset, NOTE: Don't remove '*' prior to <kg-type>
+        # Find the best checkpoint and copy to predefined path for training QA dataset
+        #NOTE: Don't remove '*' prior to <kg-type>
         find \
         $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> \
         -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t \
