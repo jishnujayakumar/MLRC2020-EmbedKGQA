@@ -31,12 +31,12 @@ python main.py  --model TuckER \
 
 - After training respective MetaQA dataset place the outputs to 
     -   ```bash
-        # For MetQA_half dataset
+        # For MetaQA_half dataset
         cp -R \
         $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ \
         $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
         
-        # For MetQA dataset
+        # For MetaQA dataset
         cp -R \
         $EMBED_KGQA_DIR/kg_embeddings/<model>/ \
         MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
@@ -48,17 +48,16 @@ python main.py  --model TuckER \
 kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml \
 --job.device cuda:<gpu-id>
 ```
-- **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/....`
+- **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/....`
 
 - After training respective WebQSP dataset place the outputs to 
     -   ```bash
-        #for dataset-name:{fbwq_half, fbwq_full}, kg-type:{half, full}
-        cp -R \
-        $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name>/ \
-        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        # NOTE: For dataset-name:{fbwq_half, fbwq_full}, kg-type:{half, full}
 
         # Find the best checkpoint and copy to predefined path for training QA dataset
-        #NOTE: Don't remove '*' prior to <kg-type>
+
+        # NOTE: Don't remove '*' prior to <kg-type>
+        
         find \
         $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> \
         -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t \
