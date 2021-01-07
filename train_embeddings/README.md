@@ -35,26 +35,25 @@ python main.py  --model TuckER \
             # For MetaQA_half dataset
             # Predefined path to store the necessary KGE training output files
             # to be used for training QA dataset
-            destination_path=`EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/`
+            destination_path="EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/"
             
             # Make the required directory
             mkdir -p $destination_path
             
             # Copy to predefined location
-            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $destination_path
+            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/* $destination_path
             ```
-    -   For MetaQA_full dataset
+    -   For MetaQA dataset
         -   ```bash
-            # For MetaQA_half dataset
             # Predefined path to store the necessary KGE training output files
             # to be used for training QA dataset
-            destination_path=`EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/`
+            destination_path="$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/"
             
             # Make the required directory
             mkdir -p $destination_path
             
             # Copy to predefined location
-            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $destination_path
+            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA/* $destination_path
             ```
 ### Train WebQuestionsSP KG
 
