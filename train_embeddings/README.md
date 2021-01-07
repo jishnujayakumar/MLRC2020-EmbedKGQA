@@ -32,10 +32,14 @@ python main.py  --model TuckER \
 - After training respective MetaQA dataset place the outputs to 
     -   ```bash
         # For MetQA_half dataset
-        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
+        cp -R \
+        $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ \
+        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
         
         # For MetQA dataset
-        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
+        cp -R \
+        $EMBED_KGQA_DIR/kg_embeddings/<model>/ \
+        MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
         ```
 ### Train WebQuestionsSP KG
 
@@ -49,13 +53,20 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
 - After training respective WebQSP dataset place the outputs to 
     -   ```bash
         #for dataset-name:{fbwq_half, fbwq_full}, kg-type:{half, full}
-        cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name>/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        cp -R \
+        $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name>/ \
+        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
 
         # Find the best checkpoint and copy to predefined path for training QA dataset
-        find $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        find \
+        $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> -type f -name 'checkpoint_best.pt' -print0 | \
+        xargs -0 -r cp -t \
+        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
 
         # Copy entity_ids.del to predefined path for training QA dataset
-        cp $EMBED_KGQA_DIR/data/<dataset-name>/entity_ids.del $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        cp \
+        $EMBED_KGQA_DIR/data/<dataset-name>/entity_ids.del \
+        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
         ```
 
 - This scheme is used as suggested by [1]'s author. View [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
