@@ -30,17 +30,32 @@ python main.py  --model TuckER \
 - **Output path**: `$EMBED_KGQA_DIR/kg_embeddings/MetaQA/....`
 
 - After training the respective MetaQA KG dataset, place the output to predined path to train the QA dataset
-    -   ```bash
-        # For MetaQA_half dataset
-        cp -R \
-        $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ \
-        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/
-        
-        # For MetaQA dataset
-        cp -R \
-        $EMBED_KGQA_DIR/kg_embeddings/<model>/ \
-        MetaQA/ $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_full/
-        ```
+    -   For MetaQA_half dataset
+        -   ```bash
+            # For MetaQA_half dataset
+            # Predefined path to store the necessary KGE training output files
+            # to be used for training QA dataset
+            destination_path=`EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/`
+            
+            # Make the required directory
+            mkdir -p $destination_path
+            
+            # Copy to predefined location
+            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $destination_path
+            ```
+    -   For MetaQA_full dataset
+        -   ```bash
+            # For MetaQA_half dataset
+            # Predefined path to store the necessary KGE training output files
+            # to be used for training QA dataset
+            destination_path=`EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_MetaQA_half/`
+            
+            # Make the required directory
+            mkdir -p $destination_path
+            
+            # Copy to predefined location
+            cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/MetaQA_half/ $destination_path
+            ```
 ### Train WebQuestionsSP KG
 
 ```bash
@@ -54,19 +69,23 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
     -   ```bash
         # NOTE: For dataset-name:{fbwq_half, fbwq_full}, kg-type:{half, full}
 
+        # Predefined path to store the necessary KGE training output files
+        # to be used for training QA dataset
+        destination_path=`$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/`
+
+        # Make the required directory
+        mkdir -p $destination_path
+
         # Find the best checkpoint and copy to predefined path for training QA dataset
 
         # NOTE: Don't remove '*' prior to <kg-type>
-        
+
         find \
         $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> \
-        -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t \
-        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t $destination_path
 
         # Copy entity_ids.del to predefined path for training QA dataset
-        cp \
-        $EMBED_KGQA_DIR/data/<dataset-name>/entity_ids.del \
-        $EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/
+        cp $EMBED_KGQA_DIR/data/<dataset-name>/entity_ids.del $destination_path
         ```
 
 - This scheme is used as suggested by [1]'s author. View [here](https://github.com/malllabiisc/EmbedKGQA#webquestionssp).
