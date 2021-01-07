@@ -62,7 +62,7 @@ kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.
 
         # Predefined path to store the necessary KGE training output files
         # to be used for training QA dataset
-        destination_path=`$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/`
+        destination_path="$EMBED_KGQA_DIR/pretrained_models/embeddings/<model>_<dataset-name>/"
 
         # Make the required directory
         mkdir -p $destination_path
