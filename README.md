@@ -55,7 +55,7 @@ echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
 ```
 
 # Train KG Embeddings
-- [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/README.md#steps-to-train-knowledge-graph-embedding-models) to train KG embeddings.
+- [Steps](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/tree/main/train_embeddings#steps-to-train-knowledge-graph-embedding-models) to train KG embeddings.
 
 # Train QA Datasets
 Hyperparameters in the following commands are set w.r.t. [[1]](https://github.com/malllabiisc/EmbedKGQA#metaqa).
