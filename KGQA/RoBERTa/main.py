@@ -17,7 +17,7 @@ import sys
 sys.path.append("../..") # Adds higher directory to python modules path.
 from kge.model import KgeModel
 from kge.util.io import load_checkpoint
-fro helpers import custom_collate_fn
+from helpers import custom_collate_fn
 
 def str2bool(v):
     if isinstance(v, bool):
