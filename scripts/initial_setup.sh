@@ -4,6 +4,6 @@
 pip install -r requirements.txt
 
 # Create required directories
-mkdir -p checkpoints/ MLRC2020-EmbedKGQA/KGQA/RoBERTa/results/
+mkdir -p checkpoints/ KGQA/RoBERTa/results/
 
 echo "Initial setup complete."
