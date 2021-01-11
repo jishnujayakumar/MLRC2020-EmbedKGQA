@@ -91,7 +91,8 @@ python main.py  --mode train
 
         
 # Method: 2
-$EMBED_KGQA_DIR/scripts/train_metaQA.sh <ComplEX/TuckER> <half/full> <1/2/3> <batch_size> <gpu_id> <relation_dim> #modify the hyperparameters in the script file w.r.t. your usecase
+# Modify the hyperparameters in the script file w.r.t. your usecase
+$EMBED_KGQA_DIR/scripts/train_metaQA.sh <ComplEX/TuckER> <half/full> <1/2/3> <batch_size> <gpu_id> <relation_dim>
 ```
 
 ### WebQuestionsSP
@@ -119,6 +120,7 @@ python main.py  --mode train
                 --outfile <output_file_name>
 
 # Method: 2
+# Modify the hyperparameters in the script file w.r.t. your usecase
 $EMBED_KGQA_DIR/scripts/train_webqsp.sh <ComplEx/TuckER> <RoBERTa/XLNet/...> <half/full> <batch_size> <gpu_id> <relation_dim>
 ```
 
