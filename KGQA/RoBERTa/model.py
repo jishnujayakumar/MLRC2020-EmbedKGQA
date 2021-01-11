@@ -140,9 +140,6 @@ class RelationExtractor(nn.Module):
         return outputs
 
     def TuckER(self, head, relation):
-        print(head)
-        print(relation)
-        print(self.bn0)
         head = self.bn0(head)
         head = self.ent_dropout(head)
         x = head.view(-1, 1, head.size(1))
