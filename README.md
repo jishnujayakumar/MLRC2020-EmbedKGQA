@@ -69,59 +69,72 @@ Hyperparameters in the following commands are set w.r.t. [[1]](https://github.co
 ```bash
 # Method: 1
 cd $EMBED_KGQA_DIR/KGQA/LSTM;
-python main.py  --mode train 
-            --nb_epochs 100
-            --relation_dim 200
-            --hidden_dim 256
-            --gpu 0 #GPU-ID
-            --freeze 0 
-            --batch_size 64
-            --validate_every 4 
-            --hops <1/2/3> #n-hops
-            --lr 0.0005 
-            --entdrop 0.1 
-            --reldrop 0.2  
-            --scoredrop 0.2
-            --decay 1.0
-            --model <ComplEx/TuckER> #KGE models
-            --patience 10 
-            --ls 0.0 
-            --use_cuda True #Enable CUDA
+python main.py  --mode train \
+            --nb_epochs 100 \
+            --relation_dim 200 \
+            --hidden_dim 256 \
+            --gpu 0 \ #GPU-ID
+            --freeze 0 \
+            --batch_size 64 \
+            --validate_every 4 \
+            --hops <1/2/3> \ #n-hops
+            --lr 0.0005 \
+            --entdrop 0.1 \ 
+            --reldrop 0.2 \
+            --scoredrop 0.2 \
+            --decay 1.0 \
+            --model <ComplEx/TuckER> \ #KGE models
+            --patience 10 \
+            --ls 0.0 \
+            --use_cuda True \ #Enable CUDA
             --kg_type <half/full>
 
         
 # Method: 2
 # Modify the hyperparameters in the script file w.r.t. your usecase
-$EMBED_KGQA_DIR/scripts/train_metaQA.sh <ComplEX/TuckER> <half/full> <1/2/3> <batch_size> <gpu_id> <relation_dim>
+$EMBED_KGQA_DIR/scripts/train_metaQA.sh \
+    <ComplEX/TuckER> \
+    <half/full> \
+    <1/2/3> \
+    <batch_size> \
+    <gpu_id> \
+    <relation_dim>
 ```
 
 ### WebQuestionsSP
 ```bash
 # Method: 1
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
-python main.py  --mode train 
-                --relation_dim 200
-                --que_embedding_model <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer>
-                --do_batch_norm 0
-                --gpu 0 #GPU-ID
-                --freeze 1 
-                --batch_size 16 --validate_every 10 
-                --hops <webqsp_half/webqsp_full>
-                --lr 0.00002 
+python main.py  --mode train \
+                --relation_dim 200 \
+                --que_embedding_model <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer> \
+                --do_batch_norm 0 \
+                --gpu 0 #GPU-ID \
+                --freeze 1 \
+                --batch_size 16 \
+                --validate_every 10 \
+                --hops <webqsp_half/webqsp_full> \
+                --lr 0.00002 \
                 --entdrop 0.0 
-                --reldrop 0.0 
-                --scoredrop 0.0
-                --decay 1.0 
-                --model <ComplEx/TuckER> 
-                --patience 20 
-                --ls 0.0 
-                --l3_reg 0.001 
-                --nb_epochs 200 
+                --reldrop 0.0 \
+                --scoredrop 0.0 \
+                --decay 1.0 \
+                --model <ComplEx/TuckER> \
+                --patience 20 \
+                --ls 0.0 \
+                --l3_reg 0.001 \
+                --nb_epochs 200 \
                 --outfile <output_file_name>
 
 # Method: 2
 # Modify the hyperparameters in the script file w.r.t. your usecase
-$EMBED_KGQA_DIR/scripts/train_webqsp.sh <ComplEx/TuckER> <RoBERTa/XLNet/...> <half/full> <batch_size> <gpu_id> <relation_dim>
+$EMBED_KGQA_DIR/scripts/train_webqsp.sh \
+    <ComplEx/TuckER> \
+    <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer> \
+    <half/full> \
+    <batch_size> \
+    <gpu_id> \
+    <relation_dim>
 ```
 
 # Helpful links
