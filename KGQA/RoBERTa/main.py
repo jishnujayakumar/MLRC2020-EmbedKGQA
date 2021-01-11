@@ -17,7 +17,6 @@ import sys
 sys.path.append("../..") # Adds higher directory to python modules path.
 from kge.model import KgeModel
 from kge.util.io import load_checkpoint
-from helpers import custom_collate_fn
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -392,7 +391,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
     dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model)
-    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn(dataset))
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     print('Creating model...')
     model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
     print('Model created!')
