@@ -115,7 +115,7 @@ python main.py  --mode train
 # Helpful links
 - [Details](https://github.com/malllabiisc/EmbedKGQA#instructions) about data and pretrained weights.
 - [Details](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) about dataset creation.
-- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by [Apoorva Saxena](https://apoorvumang.github.io/).
+- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by [Apoorva](https://apoorvumang.github.io/).
 
 
 ### Citation:
@@ -124,7 +124,7 @@ Please cite the following paper if you use this code in your work.
 ```bibtex
 Placeholder for ReScience C BibTex
 ```
-Minor modifications have been made to [5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a) in order to perform the ablation study. In case of any query relating to the original code[1], please contact [Apoorva Saxena](https://apoorvumang.github.io/).
+Minor modifications have been made to [5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a) in order to perform the ablation study. In case of any query relating to the original code[1], please contact [Apoorva](https://apoorvumang.github.io/).
 
 For any clarification, comments, or suggestions please create an issue[i] or contact [Jishnu](https://jishnujayakumar.github.io/) or [Ashish](mailto:asardana@nvidia.com).
 
