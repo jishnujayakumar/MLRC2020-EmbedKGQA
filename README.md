@@ -3,7 +3,8 @@
 - The code is build upon [1]:[5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a).
 # Ablation Study
 - Knowledge Graph Embedding model
-     - [TuckER](https://arxiv.org/abs/1902.00898)
+     - [TuckER](https://arxiv.org/abs/1901.09590) (For MetaQA, MetaQA_half datasets)
+     - [RelationalTucker3](https://arxiv.org/abs/1902.00898) (For fbwq_full, fbwq_half datasets)
 - Question embedding models
     - [ALBERT](https://arxiv.org/abs/1909.11942)
     - [XLNet](https://arxiv.org/abs/1906.08237)
@@ -124,4 +125,6 @@ Please cite the following paper if you use this code in your work.
 Placeholder for ReScience C BibTex
 ```
 
-For any clarification, comments, or suggestions please create an issue or contact [Jishnu](https://jishnujayakumar.github.io/) or [Ashish](mailto:asardana@nvidia.com).
+For any clarification, comments, or suggestions please create an issue[i] or contact [Jishnu](https://jishnujayakumar.github.io/) or [Ashish](mailto:asardana@nvidia.com).
+
+- TODO: Once the repo is made public, setup a github discussion tab as an alternative to [i].
