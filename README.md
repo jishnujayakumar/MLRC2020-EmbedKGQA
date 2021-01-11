@@ -43,15 +43,15 @@
 # Clone the repo
 git clone https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA && cd "$_"
 
+# Set a new env variable called EMBED_KGQA_DIR with MLRC2020-EmbedKGQA/ directory's absolute path as value
+# If using bash shell, run 
+echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
+
 # Change script permissions
 chmod -R 700 scripts/
 
 # Initial setup
 ./scripts/initial_setup.sh
-
-# Set a new env variable called EMBED_KGQA_DIR with MLRC2020-EmbedKGQA/ directory's absolute path as value
-# If using bash shell, run 
-echo 'export EMBED_KGQA_DIR=`pwd`' >> ~/.bash_profile && source ~/.bash_profile
 
 # Download and unzip, data and pretrained_models
 ./scripts/download_artifacts.sh
