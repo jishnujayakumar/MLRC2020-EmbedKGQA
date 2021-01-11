@@ -160,6 +160,72 @@ def inTopk(scores, ans, k):
             result = True
     return result
 
+# Creator: Jishnu P   
+def eval(model_chkpt_file):
+    """
+
+    Perform evaluation using the best trained model on test data 
+
+    Input: 
+        model: The best model (*.pt) checkpoint file,
+
+    Output: 
+
+    """
+
+    model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
+    model = RelationExtractor(embedding_dim=embedding_dim, 
+                            num_entities = len(idx2entity), 
+                            relation_dim=relation_dim, 
+                            pretrained_embeddings=embedding_matrix, 
+                            freeze=freeze, 
+                            device=device, 
+                            entdrop = entdrop, 
+                            reldrop = reldrop, 
+                            scoredrop = scoredrop, 
+                            l3_reg = l3_reg, 
+                            model = model_name, 
+                            que_embedding_model=que_embedding_model, 
+                            ls = ls, 
+                            do_batch_norm=do_batch_norm)
+    model.load_state_dict(torch.load(model_chkpt_file, map_location=lambda storage, loc: storage))
+    for parameter in model.parameters():
+        parameter.requires_grad = False
+    model.eval()
+
+    data = process_text_file(data_path)
+    idx2entity = {}
+    for key, value in entity2idx.items():
+        idx2entity[value] = key
+    answers = []
+    data_gen = data_generator(data=data, dataloader=train_dataloader, entity2idx=entity2idx)
+    total_correct = 0
+    error_count = 0
+    num_incorrect = 0
+    incorrect_rank_sum = 0
+    not_in_top_50_count = 0
+
+    # print('Loading nbhood file')
+    # if 'webqsp' in data_path:
+    #     # with open('webqsp_test_candidate_list_only2hop.pickle', 'rb') as handle:
+    #     with open('webqsp_test_candidate_list_half.pickle', 'rb') as handle:
+    #         qa_nbhood_list = pickle.load(handle)
+    # else:
+    #     with open('qa_dev_full_candidate_list.pickle', 'rb') as handle:
+    #         qa_nbhood_list = pickle.load(handle)
+
+    scores_list = []
+    hit_at_10 = 0
+    candidates_with_scores = []
+    
+
+    answers, score = validate_v2(model=model, 
+                                data_path= valid_data_path, 
+                                entity2idx=entity2idx, 
+                                train_dataloader=dataset, 
+                                device=device, 
+                                model_name=model_name)
+
 def validate_v2(data_path, device, model, train_dataloader, entity2idx, model_name):
     model.eval()
     data = process_text_file(data_path)
@@ -279,13 +345,9 @@ def set_bn_eval(m):
 
 def getEntityEmbeddings(model_name, kge_model, hops):
     e = {}
-
-    if model_name == "ComplEx":
-        model_dir = f"../../pretrained_models/embeddings/{model_name}"
-    else:
-        model_dir = f"../../kg_embeddings/{model_name}"
-
+    model_dir = f"../../pretrained_models/embeddings/{model_name}"
     entity_dict = f"{model_dir}_fbwq_full/entity_ids.del"
+    
     if 'half' in hops:
         entity_dict = f"{model_dir}_fbwq_half/entity_ids.del"
         print('Loading half entity_ids.del')
@@ -299,6 +361,9 @@ def getEntityEmbeddings(model_name, kge_model, hops):
     f.close()
     return e
 
+def get_chkpt_path(model_name, que_embedding_model, outfile):
+    return f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt"
+
 def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
     if not os.path.exists(webqsp_checkpoint_folder):
@@ -309,10 +374,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     if 'half' in hops:
         kg_type = 'half'
     
-    if model_name == "ComplEx": 
-        checkpoint_file = f"../../pretrained_models/embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
-    else:
-        checkpoint_file = f"../../kg_embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
+    checkpoint_file = f"../../pretrained_models/embeddings/{model_name}_fbwq_{kg_type}/checkpoint_best.pt"
 
     print('Loading kg embeddings from', checkpoint_file)
     kge_checkpoint = load_checkpoint(checkpoint_file)
@@ -382,21 +444,20 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
                     best_model = model.state_dict()
                     print(hops + " hop Validation accuracy (no relation scoring) increased from previous epoch", score)
                     writeToFile(answers, f'results/{model_name}_{que_embedding_model}_{outfile}.txt')
-                    torch.save(best_model, f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt")
+                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
                 elif (score < best_score + eps) and (no_update < patience):
                     no_update +=1
                     print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
                 elif no_update == patience:
                     print("Model has exceed patience. Saving best model and exiting")
-                    torch.save(best_model, f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt")
+                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
                     exit(0)
                 if epoch == nb_epochs-1:
                     print("Final Epoch has reached. Stoping and saving model.")
-                    torch.save(best_model, f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt")
+                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
                     exit()
                 # torch.save(model.state_dict(), "checkpoints/roberta_finetune/"+str(epoch)+".pt")
-                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")
-                    
+                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")                
 
 def process_text_file(text_file, split=False):
     data_file = open(text_file, 'r')
