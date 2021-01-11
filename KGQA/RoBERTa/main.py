@@ -347,7 +347,7 @@ def getEntityEmbeddings(model_name, kge_model, hops):
     e = {}
     model_dir = f"../../pretrained_models/embeddings/{model_name}"
     entity_dict = f"{model_dir}_fbwq_full/entity_ids.del"
-    
+
     if 'half' in hops:
         entity_dict = f"{model_dir}_fbwq_half/entity_ids.del"
         print('Loading half entity_ids.del')
@@ -391,7 +391,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
     dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model)
-    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn(dataset))
     print('Creating model...')
     model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
     print('Model created!')
