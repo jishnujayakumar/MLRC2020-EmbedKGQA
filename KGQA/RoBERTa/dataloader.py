@@ -78,7 +78,7 @@ class DatasetWebQSP(Dataset):
         max_length = 64
         question_tokenized = self.tokenizer.tokenize(question)
         question_tokenized = self.pad_sequence(question_tokenized, max_length)
-        question_tokenized = torch.tensor(self.tokenizer.encode_lus(
+        question_tokenized = torch.tensor(self.tokenizer.encode_plus(
                                 question, # Question to encode
                                 max_length=max_length,
                                 return_token_type_ids=False,
