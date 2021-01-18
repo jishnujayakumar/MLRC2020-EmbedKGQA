@@ -96,7 +96,7 @@ class DatasetWebQSP(Dataset):
             return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
         else:
 
-            encoded_que = tokenizer.encode_plus(text,
+            encoded_que = SELF.tokenizer.encode_plus(text,
                                         max_length=self.max_length,
                                         add_special_tokens = False,
                                         pad_to_max_length=True,
