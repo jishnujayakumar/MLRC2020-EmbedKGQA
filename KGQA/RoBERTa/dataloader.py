@@ -100,7 +100,6 @@ class DatasetWebQSP(Dataset):
                                         max_length=self.max_length,
                                         add_special_tokens = False,
                                         pad_to_max_length=True,
-                                        padding_side='right',
                                         return_tensors='pt',  # Return PyTorch tensors
                                         return_attention_mask=True)
             return encoded_que['input_ids'], encoded_que['attention_mask']
