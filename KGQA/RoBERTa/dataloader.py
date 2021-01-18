@@ -76,7 +76,6 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-
         if self.kg_model == 'ComplEx':
             question = f"<s>{question}</s>"
             question_tokenized = self.tokenizer.tokenize(question)
@@ -96,7 +95,7 @@ class DatasetWebQSP(Dataset):
 
             return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
         else:
-            encoded_que = tokenizer.encode_plus(
+            encoded_que = self.tokenizer.encode_plus(
             question,
             max_length=max_length,
             add_special_tokens=False, # Add '[CLS]' and '[SEP]'
