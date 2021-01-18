@@ -13,7 +13,7 @@ from transformers import *
 from helpers import *
 
 class DatasetWebQSP(Dataset):
-    def __init__(self, data, entities, entity2idx, transformer_name):
+    def __init__(self, data, entities, entity2idx, transformer_name, kg_model):
         self.data = data
         self.entities = entities
         self.entity2idx = entity2idx
@@ -24,6 +24,8 @@ class DatasetWebQSP(Dataset):
         self.pre_trained_model_name = get_pretrained_model_name(transformer_name)
         self.tokenizer = None
         self.set_tokenizer()
+        self.max_length = 64
+        self.kg_model = kg_model
         
     def set_tokenizer(self):
         if self.transformer_name == 'RoBERTa':
@@ -74,25 +76,36 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-        question = f"<s>{question}</s>"
-        max_length = 64
-        question_tokenized = self.tokenizer.tokenize(question)
-        question_tokenized = self.pad_sequence(question_tokenized, max_length)
-        question_tokenized = torch.tensor(self.tokenizer.encode(
-                                question, # Question to encode
-                                max_length=max_length,
-                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
-                                ))
 
-        attention_mask = []
-        for q in question_tokenized:
-            # 1 means padding token
-            if q == 1:
-                attention_mask.append(0)
-            else:
-                attention_mask.append(1)
+        if self.kg_model == 'ComplEx':
+            question = f"<s>{question}</s>"
+            question_tokenized = self.tokenizer.tokenize(question)
+            question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
+            question_tokenized = torch.tensor(self.tokenizer.encode(
+                                    question, # Question to encode
+                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                    ))
 
-        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+            attention_mask = []
+            for q in question_tokenized:
+                # 1 means padding token
+                if q == 1:
+                    attention_mask.append(0)
+                else:
+                    attention_mask.append(1)
+
+            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+        else:
+            encoded_que = tokenizer.encode_plus(
+            question,
+            max_length=max_length,
+            add_special_tokens=False, # Add '[CLS]' and '[SEP]'
+            return_token_type_ids=False,
+            pad_to_max_length=True,
+            return_attention_mask=True,
+            return_tensors='pt'  # Return PyTorch tensors
+            )
+            return encoded_que['input_ids'][0], encoded_que['attention_mask']
 
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
