@@ -98,13 +98,12 @@ class DatasetWebQSP(Dataset):
             encoded_que = self.tokenizer.encode(
             question,
             max_length=self.max_length,
-            add_special_tokens=False, # Add '[CLS]' and '[SEP]'
-            return_token_type_ids=False,
+            add_special_tokens=True, # Add '[CLS]' and '[SEP]'
             padding='max_length',
             return_attention_mask=True,
             return_tensors='pt'  # Return PyTorch tensors
             )
-            return encoded_que['input_ids'][0], encoded_que['attention_mask'][0]
+            return encoded_que['input_ids'], encoded_que['attention_mask']
 
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
