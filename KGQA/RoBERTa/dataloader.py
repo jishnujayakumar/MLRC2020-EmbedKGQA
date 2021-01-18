@@ -97,7 +97,7 @@ class DatasetWebQSP(Dataset):
         else:
             encoded_que = self.tokenizer.encode_plus(
             question,
-            max_length=max_length,
+            max_length=self.max_length,
             add_special_tokens=False, # Add '[CLS]' and '[SEP]'
             return_token_type_ids=False,
             pad_to_max_length=True,
