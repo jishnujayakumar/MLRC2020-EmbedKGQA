@@ -104,7 +104,7 @@ class DatasetWebQSP(Dataset):
             return_attention_mask=True,
             return_tensors='pt'  # Return PyTorch tensors
             )
-            return encoded_que['input_ids'], encoded_que['attention_mask']
+            return encoded_que['input_ids'].flatten(), encoded_que['attention_mask'].flatten()
 
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
