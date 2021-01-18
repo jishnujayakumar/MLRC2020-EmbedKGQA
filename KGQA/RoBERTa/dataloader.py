@@ -101,7 +101,7 @@ class DatasetWebQSP(Dataset):
                                         add_special_tokens = False,
                                         pad_to_max_length=True,
                                         padding_side='right',
-                                        return_tensors='pt'  # Return PyTorch tensors
+                                        return_tensors='pt',  # Return PyTorch tensors
                                         return_attention_mask=True)
             print(encoded_que)
             return encoded_que['input_ids'], encoded_que['attention_mask']
