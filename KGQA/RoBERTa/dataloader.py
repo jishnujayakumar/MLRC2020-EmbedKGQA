@@ -80,7 +80,8 @@ class DatasetWebQSP(Dataset):
         question_tokenized = self.pad_sequence(question_tokenized, max_length)
         question_tokenized = torch.tensor(self.tokenizer.batch_encode_plus(
                                 question, # Question to encode
-                                add_special_tokens = True # Add '[CLS]' and '[SEP]', as per original paper
+                                add_special_tokens = True, # Add '[CLS]' and '[SEP]', as per original paper
+                                padding='max_length'
                                 ))
 
         attention_mask = []
