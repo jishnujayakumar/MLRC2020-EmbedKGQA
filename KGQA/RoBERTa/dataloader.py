@@ -103,7 +103,6 @@ class DatasetWebQSP(Dataset):
                                         padding_side='right',
                                         return_tensors='pt',  # Return PyTorch tensors
                                         return_attention_mask=True)
-            print(encoded_que)
             return encoded_que[0]['input_ids'], encoded_que[0]['attention_mask']
 
 class DataLoaderWebQSP(DataLoader):
