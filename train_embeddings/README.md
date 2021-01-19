@@ -8,9 +8,9 @@
     ```
 - Please tune the hyperparameters according to your need. If needed, add more parameters from [here](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/main.py).
 - Tests have been performed on the following models(`<model>`)
-    - ComplEx: A pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
-    - TuckER: Training has been performed for for MetaQA KG dataset.
-    - SimplE: Training has been performed for WebQSP KG dataset. (Due to non- availability of Vanilla TuckER model in `LibKGE`: [2b693e3](https://github.com/uma-pi1/kge/tree/2b693e31c4c06c71336f1c553727419fe01d4aa6)).
+    - ComplEx: Pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
+    - TuckER: Training has been performed for `MetaQA` KG dataset.
+    - SimplE: Training has been performed for `WebQSP` KG dataset. (Due to non- availability of Vanilla TuckER model in `LibKGE`: [2b693e3](https://github.com/uma-pi1/kge/tree/2b693e31c4c06c71336f1c553727419fe01d4aa6)).
 - Other supported types include: 
     - DistMult
     - RESCAL  
