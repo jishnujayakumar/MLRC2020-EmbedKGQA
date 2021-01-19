@@ -84,7 +84,6 @@ class DatasetWebQSP(Dataset):
                                 question, # Question to encode
                                 truncation=True,
                                 max_length=self.max_length,
-                                truncation=True,
                                 padding='max_length',
                                 add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
                                 ))
