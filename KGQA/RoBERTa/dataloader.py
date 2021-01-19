@@ -107,4 +107,4 @@ class DatasetWebQSP(Dataset):
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
         super(DataLoaderWebQSP, self).__init__(*args, **kwargs)
-        self.collate_fn = 
+        self.collate_fn = _collate_fn
