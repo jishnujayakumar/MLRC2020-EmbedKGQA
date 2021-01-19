@@ -79,7 +79,7 @@ class DatasetWebQSP(Dataset):
         question = f"<s>{question}</s>"
         question_tokenized = self.tokenizer.tokenize(question)
         
-        question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
+        # question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
         question_tokenized = torch.tensor(self.tokenizer.encode(
                                 question, # Question to encode
                                 truncation=True,
