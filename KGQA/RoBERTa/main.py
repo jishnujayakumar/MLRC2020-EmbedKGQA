@@ -412,10 +412,10 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         model.eval()
         answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = infer(model=model, data_path= test_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
 
-        print(f"ACC:"{accuracy})
-        print(f"Hits@1:"{hits_at_1})
-        print(f"Hits@5:"{hits_at_5})
-        print(f"Hits@10:"{hits_at_10})
+        print(f"ACC: {accuracy}")
+        print(f"Hits@1: {hits_at_1}")
+        print(f"Hits@5: {hits_at_5}")
+        print(f"Hits@10: {hits_at_10}")
                 
 
 def process_text_file(text_file, split=False):
