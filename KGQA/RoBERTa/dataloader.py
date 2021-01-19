@@ -13,7 +13,7 @@ from transformers import *
 from helpers import *
 
 class DatasetWebQSP(Dataset):
-    def __init__(self, data, entities, entity2idx, transformer_name):
+    def __init__(self, data, entities, entity2idx, transformer_name, kg_model):
         self.data = data
         self.entities = entities
         self.entity2idx = entity2idx
@@ -24,6 +24,8 @@ class DatasetWebQSP(Dataset):
         self.pre_trained_model_name = get_pretrained_model_name(transformer_name)
         self.tokenizer = None
         self.set_tokenizer()
+        self.max_length = 64
+        self.kg_model = kg_model
         
     def set_tokenizer(self):
         if self.transformer_name == 'RoBERTa':
@@ -93,18 +95,8 @@ class DatasetWebQSP(Dataset):
 
         return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
-# def _collate_fn(batch):
-#     print(len(batch))
-#     exit(0)
-#     question_tokenized = batch[0]
-#     attention_mask = batch[1]
-#     head_id = batch[2]
-#     tail_onehot = batch[3]
-#     question_tokenized = torch.stack(question_tokenized, dim=0)
-#     attention_mask = torch.stack(attention_mask, dim=0)
-#     return question_tokenized, attention_mask, head_id, tail_onehot 
-
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
         super(DataLoaderWebQSP, self).__init__(*args, **kwargs)
-        self.collate_fn = _collate_fn
+        # self.collate_fn = _collate_fn
+
