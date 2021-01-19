@@ -5,7 +5,7 @@
 # Ablation Study
 - Knowledge Graph Embedding model
      - [TuckER](https://arxiv.org/abs/1901.09590) (For MetaQA, MetaQA_half datasets)
-     - [RelationalTucker3](https://arxiv.org/abs/1902.00898) (For fbwq_full, fbwq_half datasets)
+     - [SimplE](https://papers.nips.cc/paper/2018/file/b2ab001909a8a6f04b51920306046ce5-Paper.pdf) (For fbwq_full, fbwq_half datasets)
 - Question embedding models
     - [ALBERT](https://arxiv.org/abs/1909.11942)
     - [XLNet](https://arxiv.org/abs/1906.08237)
@@ -33,7 +33,7 @@
 
 - `fbwq_full` and `fbwq_full_new` are the same but independent existence is required because
     - Pretrained `ComplEx` model uses `fbwq_full_new` as the dataset name
-    - Trained `TuckER` model uses `fbwq_full` as the dataset name
+    - Trained `SimplE` model uses `fbwq_full` as the dataset name
 - No `fbwq_full_new` dataset was found in the data shared by the author[1], so went ahead with this setting.
 
 - Also, pretrained qa_models were absent in the data shared. The reproduction results are based on training scheme used by us.
@@ -119,7 +119,7 @@ python main.py  --mode train \
                 --reldrop 0.0 \
                 --scoredrop 0.0 \
                 --decay 1.0 \
-                --model <ComplEx/TuckER> \
+                --model <ComplEx/SimplE> \
                 --patience 20 \
                 --ls 0.0 \
                 --l3_reg 0.001 \
@@ -129,7 +129,7 @@ python main.py  --mode train \
 # Method: 2
 # Modify the hyperparameters in the script file w.r.t. your usecase
 $EMBED_KGQA_DIR/scripts/train_webqsp.sh \
-    <ComplEx/TuckER> \
+    <ComplEx/SimplE> \
     <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer> \
     <half/full> \
     <batch_size> \
