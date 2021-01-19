@@ -1,10 +1,10 @@
 job.type: train
 job.device: 'cuda'
 dataset.name: fbwq_full
-model: relational_tucker3
+model: simple
 
 train:
-  max_epochs: 100
+  max_epochs: 25
   num_workers: 20
 
   optimizer.default:
