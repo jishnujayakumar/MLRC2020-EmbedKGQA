@@ -78,27 +78,33 @@ class DatasetWebQSP(Dataset):
     def tokenize_question(self, question):
         question = f"<s>{question}</s>"
         question_tokenized = self.tokenizer.tokenize(question)
-
+        
         if self.kg_model == 'ComplEx':
             question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
-        
-        question_tokenized = torch.tensor(self.tokenizer.encode(
+            question_tokenized = torch.tensor(self.tokenizer.encode(
                                     question, # Question to encode
-                                    add_special_tokens = False, # Add '[CLS]' and '[SEP]', as per original paper
-                                    max_length = self.max_length,
-                                    truncation=True,
-                                    padding='max_length'
+                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
                                     ))
 
-        attention_mask = []
-        for q in question_tokenized:
-            # 1 means padding token
-            if q == 1:
-                attention_mask.append(0)
-            else:
-                attention_mask.append(1)
+            attention_mask = []
+            for q in question_tokenized:
+                # 1 means padding token
+                if q == 1:
+                    attention_mask.append(0)
+                else:
+                    attention_mask.append(1)
 
-        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+        else:
+
+            encoded_que = self.tokenizer.encode_plus(question,
+                                        max_length=self.max_length,
+                                        add_special_tokens = False,
+                                        padding='max_length',
+                                        return_tensors='pt',  # Return PyTorch tensors
+                                        truncation=True,
+                                        return_attention_mask=True)
+            return encoded_que['input_ids'], encoded_que['attention_mask']
 
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
