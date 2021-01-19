@@ -235,7 +235,7 @@ class RelationExtractor(nn.Module):
         if self.que_embedding_model == "SentenceTransformer":
             #Compute token embeddings
             with torch.no_grad():
-                model_output = model(question_tokenized, attention_mask)
+                model_output = self.que_embedding_model(question_tokenized, attention_mask)
             #Perform pooling. In this case, mean pooling
             question_embedding = mean_pooling(model_output, attention_mask)
             return question_embedding
