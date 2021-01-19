@@ -160,73 +160,7 @@ def inTopk(scores, ans, k):
             result = True
     return result
 
-# Creator: Jishnu P   
-def eval(model_chkpt_file):
-    """
-
-    Perform evaluation using the best trained model on test data 
-
-    Input: 
-        model: The best model (*.pt) checkpoint file,
-
-    Output: 
-
-    """
-
-    model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
-    model = RelationExtractor(embedding_dim=embedding_dim, 
-                            num_entities = len(idx2entity), 
-                            relation_dim=relation_dim, 
-                            pretrained_embeddings=embedding_matrix, 
-                            freeze=freeze, 
-                            device=device, 
-                            entdrop = entdrop, 
-                            reldrop = reldrop, 
-                            scoredrop = scoredrop, 
-                            l3_reg = l3_reg, 
-                            model = model_name, 
-                            que_embedding_model=que_embedding_model, 
-                            ls = ls, 
-                            do_batch_norm=do_batch_norm)
-    model.load_state_dict(torch.load(model_chkpt_file, map_location=lambda storage, loc: storage))
-    for parameter in model.parameters():
-        parameter.requires_grad = False
-    model.eval()
-
-    data = process_text_file(data_path)
-    idx2entity = {}
-    for key, value in entity2idx.items():
-        idx2entity[value] = key
-    answers = []
-    data_gen = data_generator(data=data, dataloader=train_dataloader, entity2idx=entity2idx)
-    total_correct = 0
-    error_count = 0
-    num_incorrect = 0
-    incorrect_rank_sum = 0
-    not_in_top_50_count = 0
-
-    # print('Loading nbhood file')
-    # if 'webqsp' in data_path:
-    #     # with open('webqsp_test_candidate_list_only2hop.pickle', 'rb') as handle:
-    #     with open('webqsp_test_candidate_list_half.pickle', 'rb') as handle:
-    #         qa_nbhood_list = pickle.load(handle)
-    # else:
-    #     with open('qa_dev_full_candidate_list.pickle', 'rb') as handle:
-    #         qa_nbhood_list = pickle.load(handle)
-
-    scores_list = []
-    hit_at_10 = 0
-    candidates_with_scores = []
-    
-
-    answers, score = validate_v2(model=model, 
-                                data_path= valid_data_path, 
-                                entity2idx=entity2idx, 
-                                train_dataloader=dataset, 
-                                device=device, 
-                                model_name=model_name)
-
-def validate_v2(data_path, device, model, train_dataloader, entity2idx, model_name):
+def infer(data_path, device, model, train_dataloader, entity2idx, model_name, return_hits_at_k):
     model.eval()
     data = process_text_file(data_path)
     idx2entity = {}
@@ -250,6 +184,8 @@ def validate_v2(data_path, device, model, train_dataloader, entity2idx, model_na
     #         qa_nbhood_list = pickle.load(handle)
 
     scores_list = []
+    hit_at_1 = 0
+    hit_at_5 = 0
     hit_at_10 = 0
     candidates_with_scores = []
     writeCandidatesToFile = False
@@ -302,8 +238,12 @@ def validate_v2(data_path, device, model, train_dataloader, entity2idx, model_na
             candidates_with_scores.append(entry)
 
 
+        if inTopk(new_scores, ans, 1):
+            hit_at_1 += 1
+        if inTopk(new_scores, ans, 5):
+            hit_at_5 += 1
         if inTopk(new_scores, ans, 10):
-            hit_at_10 += 1
+            hit_at_50 += 1
 
         if type(ans) is int:
             ans = [ans]
@@ -328,7 +268,11 @@ def validate_v2(data_path, device, model, train_dataloader, entity2idx, model_na
     accuracy = total_correct/len(data)
     # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
     # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
-    return answers, accuracy
+
+    if return_hits_at_k:
+        return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
+    else:
+        return answers, accuracy
 
 def writeToFile(lines, fname):
     f = open(fname, 'w')
@@ -364,7 +308,7 @@ def getEntityEmbeddings(model_name, kge_model, hops):
 def get_chkpt_path(model_name, que_embedding_model, outfile):
     return f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt"
 
-def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None):
+def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None, test_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
     if not os.path.exists(webqsp_checkpoint_folder):
         os.makedirs(webqsp_checkpoint_folder)
@@ -407,7 +351,8 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
     best_model = model.state_dict()
     no_update = 0
     # time.sleep(10)
-    for epoch in range(nb_epochs):
+    if mode=='train':
+        for epoch in range(nb_epochs):
         phases = []
         for i in range(validate_every):
             phases.append('train')
@@ -437,7 +382,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
             elif phase=='valid':
                 model.eval()
                 eps = 0.0001
-                answers, score = validate_v2(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name)
+                answers, score = infer(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
                 if score > best_score + eps:
                     best_score = score
                     no_update = 0
@@ -457,7 +402,21 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
                     torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
                     exit()
                 # torch.save(model.state_dict(), "checkpoints/roberta_finetune/"+str(epoch)+".pt")
-                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")                
+                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")   
+    
+    elif mode=='test':
+        model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
+        model.load_state_dict(torch.load(model_chkpt_file, map_location=lambda storage, loc: storage))
+        for parameter in model.parameters():
+            parameter.requires_grad = False
+        model.eval()
+        answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = infer(model=model, data_path= test_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
+
+        print(f"ACC:"{accuracy})
+        print(f"Hits@1:"{hits_at_1})
+        print(f"Hits@5:"{hits_at_5})
+        print(f"Hits@10:"{hits_at_10})
+                
 
 def process_text_file(text_file, split=False):
     data_file = open(text_file, 'r')
@@ -521,8 +480,10 @@ if 'webqsp' in hops:
     test_data_path = '../../data/QA_data/WebQuestionsSP/qa_test_webqsp.txt'
 
 
-if args.mode == 'train':
-    train(data_path=data_path, 
+
+perform_experiment(
+    data_path=data_path, 
+    mode=args.mode,
     neg_batch_size=args.neg_batch_size, 
     batch_size=args.batch_size,
     shuffle=args.shuffle_data, 
@@ -534,6 +495,7 @@ if args.mode == 'train':
     gpu=args.gpu, 
     use_cuda=args.use_cuda, 
     valid_data_path=valid_data_path,
+    test_data_path=test_data_path,
     patience=args.patience,
     validate_every=args.validate_every,
     freeze=args.freeze,
@@ -549,19 +511,5 @@ if args.mode == 'train':
     load_from=args.load_from,
     outfile=args.outfile,
     do_batch_norm=args.do_batch_norm,
-    que_embedding_model=args.que_embedding_model)
-
-
-
-elif args.mode == 'eval':
-    eval(data_path = test_data_path,
-    entity_path=entity_embedding_path, 
-    relation_path=relation_embedding_path, 
-    entity_dict=entity_dict, 
-    relation_dict=relation_dict,
-    model_path='checkpoints/head_as_neg_model/best_score_model.pt',
-    train_data=data_path,
-    gpu=args.gpu,
-    hidden_dim=args.hidden_dim,
-    relation_dim=args.relation_dim,
-    embedding_dim=args.embedding_dim)
+    que_embedding_model=args.que_embedding_model
+)
