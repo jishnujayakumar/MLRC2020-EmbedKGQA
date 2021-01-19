@@ -353,56 +353,56 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
     # time.sleep(10)
     if mode=='train':
         for epoch in range(nb_epochs):
-        phases = []
-        for i in range(validate_every):
-            phases.append('train')
-        phases.append('valid')
-        for phase in phases:
-            if phase == 'train':
-                model.train()
-                # model.apply(set_bn_eval)
-                loader = tqdm(data_loader, total=len(data_loader), unit="batches")
-                running_loss = 0
-                for i_batch, a in enumerate(loader):
-                    model.zero_grad()
-                    question_tokenized = a[0].to(device)
-                    attention_mask = a[1].to(device)
-                    positive_head = a[2].to(device)
-                    positive_tail = a[3].to(device)    
-                    loss = model(question_tokenized=question_tokenized, attention_mask=attention_mask, p_head=positive_head, p_tail=positive_tail)
-                    loss.backward()
-                    optimizer.step()
-                    running_loss += loss.item()
-                    loader.set_postfix(Loss=running_loss/((i_batch+1)*batch_size), Epoch=epoch)
-                    loader.set_description('{}/{}'.format(epoch, nb_epochs))
-                    loader.update()
-                
-                scheduler.step()
+            phases = []
+            for i in range(validate_every):
+                phases.append('train')
+            phases.append('valid')
+            for phase in phases:
+                if phase == 'train':
+                    model.train()
+                    # model.apply(set_bn_eval)
+                    loader = tqdm(data_loader, total=len(data_loader), unit="batches")
+                    running_loss = 0
+                    for i_batch, a in enumerate(loader):
+                        model.zero_grad()
+                        question_tokenized = a[0].to(device)
+                        attention_mask = a[1].to(device)
+                        positive_head = a[2].to(device)
+                        positive_tail = a[3].to(device)    
+                        loss = model(question_tokenized=question_tokenized, attention_mask=attention_mask, p_head=positive_head, p_tail=positive_tail)
+                        loss.backward()
+                        optimizer.step()
+                        running_loss += loss.item()
+                        loader.set_postfix(Loss=running_loss/((i_batch+1)*batch_size), Epoch=epoch)
+                        loader.set_description('{}/{}'.format(epoch, nb_epochs))
+                        loader.update()
+                    
+                    scheduler.step()
 
-            elif phase=='valid':
-                model.eval()
-                eps = 0.0001
-                answers, score = infer(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
-                if score > best_score + eps:
-                    best_score = score
-                    no_update = 0
-                    best_model = model.state_dict()
-                    print(hops + " hop Validation accuracy (no relation scoring) increased from previous epoch", score)
-                    writeToFile(answers, f'results/{model_name}_{que_embedding_model}_{outfile}.txt')
-                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
-                elif (score < best_score + eps) and (no_update < patience):
-                    no_update +=1
-                    print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
-                elif no_update == patience:
-                    print("Model has exceed patience. Saving best model and exiting")
-                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
-                    exit(0)
-                if epoch == nb_epochs-1:
-                    print("Final Epoch has reached. Stoping and saving model.")
-                    torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
-                    exit()
-                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/"+str(epoch)+".pt")
-                # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")   
+                elif phase=='valid':
+                    model.eval()
+                    eps = 0.0001
+                    answers, score = infer(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
+                    if score > best_score + eps:
+                        best_score = score
+                        no_update = 0
+                        best_model = model.state_dict()
+                        print(hops + " hop Validation accuracy (no relation scoring) increased from previous epoch", score)
+                        writeToFile(answers, f'results/{model_name}_{que_embedding_model}_{outfile}.txt')
+                        torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
+                    elif (score < best_score + eps) and (no_update < patience):
+                        no_update +=1
+                        print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
+                    elif no_update == patience:
+                        print("Model has exceed patience. Saving best model and exiting")
+                        torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
+                        exit(0)
+                    if epoch == nb_epochs-1:
+                        print("Final Epoch has reached. Stoping and saving model.")
+                        torch.save(best_model, get_chkpt_path(model_name, que_embedding_model, outfile))
+                        exit()
+                    # torch.save(model.state_dict(), "checkpoints/roberta_finetune/"+str(epoch)+".pt")
+                    # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")   
     
     elif mode=='test':
         model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
