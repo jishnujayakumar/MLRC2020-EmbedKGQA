@@ -9,10 +9,10 @@
 - Please tune the hyperparameters according to your need. If needed, add more parameters from [here](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/train_embeddings/main.py).
 - Tests have been performed on the following models(`<model>`)
     - ComplEx: A pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
-    - TuckER: For this, training has been performed.
+    - TuckER: Training has been performed for for MetaQA KG dataset.
+    - SimplE: Training has been performed for WebQSP KG dataset. (Due to non- availability of Vanilla TuckER model in `LibKGE`: [2b693e3](https://github.com/uma-pi1/kge/tree/2b693e31c4c06c71336f1c553727419fe01d4aa6)).
 - Other supported types include: 
     - DistMult
-    - SimplE
     - RESCAL  
 
 ### Train MetaQA KG
@@ -51,7 +51,7 @@ python main.py  --model TuckER \
 
 ```bash
 #for kg_type:{half, full} use config_suffix:{half, full}
-kge start $EMBED_KGQA_DIR/config/relational_tucker3-train-webqsp-<half or full>.yaml \
+kge start $EMBED_KGQA_DIR/config/simple-train-webqsp-<half or full>.yaml \
 --job.device cuda:<gpu-id>
 ```
 - **Output path**: `$EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/....`
