@@ -186,15 +186,11 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     # aditay
     # print(idx2word.keys())
     device = torch.device(gpu if use_cuda else "cpu")
+    model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
+    model.to(device)
+
     checkpoint_path = '../../checkpoints/MetaQA/'
     if mode=='train':
-        data = process_text_file(data_path, split=False)
-        word2ix,idx2word, max_len = get_vocab(data)
-        dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
-        data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-
-        model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
-        model.to(device)
 
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
         scheduler = ExponentialLR(optimizer, decay)
@@ -263,13 +259,6 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
                         torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                         exit()
     elif mode=='test':
-        data = process_text_file(test_data_path, split=False)
-        word2ix,idx2word, max_len = get_vocab(data)
-        dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
-        data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-
-        model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
-
         model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
         
         print(model_chkpt_file_path)
