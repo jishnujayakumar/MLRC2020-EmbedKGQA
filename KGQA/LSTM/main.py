@@ -102,14 +102,23 @@ def preprocess_entities_relations(entity_dict, relation_dict, entities, relation
     f.close()
     return e,r
 
+def inTop1(top2, ans):
+    result = False
+    for x in top2:
+        if x in ans:
+            result = True
+    return result
 
-def validate(data_path, device, model, word2idx, entity2idx, model_name):
+def validate(data_path, device, model, word2idx, entity2idx, model_name, return_hits_at_k):
     model.eval()
     data = process_text_file(data_path)
     answers = []
     data_gen = data_generator(data=data, word2ix=word2idx, entity2idx=entity2idx)
     total_correct = 0
     error_count = 0
+
+    hit_at_1 = 0
+
     for i in tqdm(range(len(data))):
         try:
             d = next(data_gen)
@@ -119,6 +128,10 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name):
             ques_len = d[3].unsqueeze(0)
             tail_test = torch.tensor(ans, dtype=torch.long).to(device)
             top_2 = model.get_score_ranked(head=head, sentence=question, sent_len=ques_len)
+
+            if inTop1(top2, ans):
+                hit_at_1 += 1
+
             top_2_idx = top_2[1].tolist()[0]
             head_idx = head.tolist()
             if top_2_idx[0] == head_idx:
@@ -138,7 +151,11 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name):
             
     print(error_count)
     accuracy = total_correct/len(data)
-    return answers, accuracy
+
+    if return_hits_at_k:
+        return answers, accuracy, (hit_at_1/len(data))
+    else
+        return answers, accuracy
 
 def writeToFile(lines, fname):
     f = open(fname, 'w')
@@ -159,89 +176,121 @@ def get_chk_suffix():
 def get_checkpoint_file_path(chkpt_path, model_name, num_hops, suffix, kg_type):
     return f"{chkpt_path}{model_name}_{num_hops}_{suffix}_{kg_type}"
         
-def train(data_path, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, kg_type, valid_data_path=None):
+def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict, relation_dict, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, num_hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, w_matrix, bn_list, kg_type, valid_data_path=None, test_data_path=None):
     entities = np.load(entity_path)
     relations = np.load(relation_path)
     e,r = preprocess_entities_relations(entity_dict, relation_dict, entities, relations)
     entity2idx, idx2entity, embedding_matrix = prepare_embeddings(e)
-    data = process_text_file(data_path, split=False)
-    # data = pickle.load(open(data_path, 'rb'))
-    word2ix,idx2word, max_len = get_vocab(data)
     hops = str(num_hops)
     # print(idx2word)
     # aditay
     # print(idx2word.keys())
     device = torch.device(gpu if use_cuda else "cpu")
-    dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
-    data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
-    model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = ExponentialLR(optimizer, decay)
-    optimizer.zero_grad()
-    best_score = -float("inf")
-    best_model = model.state_dict()
-    no_update = 0
-    for epoch in range(nb_epochs):
-        phases = []
-        for i in range(validate_every):
-            phases.append('train')
-        phases.append('valid')
-        for phase in phases:
-            if phase == 'train':
-                model.train()
-                if freeze == True:
-                    # print('Freezing batch norm layers')
-                    model.apply(set_bn_eval)
-                loader = tqdm(data_loader, total=len(data_loader), unit="batches")
-                running_loss = 0
-                for i_batch, a in enumerate(loader):
-                    model.zero_grad()
-                    question = a[0].to(device)
-                    sent_len = a[1].to(device)
-                    positive_head = a[2].to(device)
-                    positive_tail = a[3].to(device)                    
 
-                    loss = model(sentence=question, p_head=positive_head, p_tail=positive_tail, question_len=sent_len)
-                    loss.backward()
-                    optimizer.step()
-                    running_loss += loss.item()
-                    loader.set_postfix(Loss=running_loss/((i_batch+1)*batch_size), Epoch=epoch)
-                    loader.set_description('{}/{}'.format(epoch, nb_epochs))
-                    loader.update()
-                
-                scheduler.step()
+    if mode='train':
+        data = process_text_file(data_path, split=False)
+        word2ix,idx2word, max_len = get_vocab(data)
+        dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
+        data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-            elif phase=='valid':
-                model.eval()
-                eps = 0.0001
-                answers, score = validate(model=model, data_path= valid_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name)
-                if score > best_score + eps:
-                    best_score = score
-                    no_update = 0
-                    best_model = model.state_dict()
-                    print(hops + " hop Validation accuracy increased from previous epoch", score)
-                    _, test_score = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name)
-                    print('Test score for best valid so far:', test_score)
-                    # writeToFile(answers, 'results_' + model_name + '_' + hops + '.txt')
-                    suffix = ''
+        model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
+        model.to(device)
+
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+        scheduler = ExponentialLR(optimizer, decay)
+        optimizer.zero_grad()
+        best_score = -float("inf")
+        best_model = model.state_dict()
+        no_update = 0
+
+        checkpoint_path = '../../checkpoints/MetaQA/'
+
+        for epoch in range(nb_epochs):
+            phases = []
+            for i in range(validate_every):
+                phases.append('train')
+            phases.append('valid')
+            for phase in phases:
+                if phase == 'train':
+                    model.train()
                     if freeze == True:
-                        suffix = '_frozen'
-                    checkpoint_path = '../../checkpoints/MetaQA/'
-                    checkpoint_file_name = get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix, kg_type)+get_chk_suffix()
-                    print('Saving checkpoint to ', checkpoint_file_name)
-                    torch.save(model.state_dict(), checkpoint_file_name)
-                elif (score < best_score + eps) and (no_update < patience):
-                    no_update +=1
-                    print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
-                elif no_update == patience:
-                    print("Model has exceed patience. Saving best model and exiting")
-                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
-                    exit()
-                if epoch == nb_epochs-1:
-                    print("Final Epoch has reached. Stopping and saving model.")
-                    torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
-                    exit()
+                        # print('Freezing batch norm layers')
+                        model.apply(set_bn_eval)
+                    loader = tqdm(data_loader, total=len(data_loader), unit="batches")
+                    running_loss = 0
+                    for i_batch, a in enumerate(loader):
+                        model.zero_grad()
+                        question = a[0].to(device)
+                        sent_len = a[1].to(device)
+                        positive_head = a[2].to(device)
+                        positive_tail = a[3].to(device)                    
+
+                        loss = model(sentence=question, p_head=positive_head, p_tail=positive_tail, question_len=sent_len)
+                        loss.backward()
+                        optimizer.step()
+                        running_loss += loss.item()
+                        loader.set_postfix(Loss=running_loss/((i_batch+1)*batch_size), Epoch=epoch)
+                        loader.set_description('{}/{}'.format(epoch, nb_epochs))
+                        loader.update()
+                    
+                    scheduler.step()
+
+                elif phase=='valid':
+                    model.eval()
+                    eps = 0.0001
+                    answers, score = validate(model=model, data_path= valid_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=False)
+                    if score > best_score + eps:
+                        best_score = score
+                        no_update = 0
+                        best_model = model.state_dict()
+                        print(hops + " hop Validation accuracy increased from previous epoch", score)
+                        _, test_score = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name)
+                        print('Test score for best valid so far:', test_score)
+                        # writeToFile(answers, 'results_' + model_name + '_' + hops + '.txt')
+                        suffix = ''
+                        if freeze == True:
+                            suffix = '_frozen'
+                        checkpoint_file_name = get_checkpoint_file_path(checkpoint_path, model_name, num_hops, suffix, kg_type)+get_chk_suffix()
+                        print('Saving checkpoint to ', checkpoint_file_name)
+                        torch.save(model.state_dict(), checkpoint_file_name)
+                    elif (score < best_score + eps) and (no_update < patience):
+                        no_update +=1
+                        print("Validation accuracy decreases to %f from %f, %d more epoch to check"%(score, best_score, patience-no_update))
+                    elif no_update == patience:
+                        print("Model has exceed patience. Saving best model and exiting")
+                        torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
+                        exit()
+                    if epoch == nb_epochs-1:
+                        print("Final Epoch has reached. Stopping and saving model.")
+                        torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
+                        exit()
+    elif mode=='test':
+        data = process_text_file(test_data_path, split=False)
+        word2ix,idx2word, max_len = get_vocab(data)
+        dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
+        data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+
+        model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
+        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
+
+        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
+        model.load_state_dict(torch.load(model_chkpt_file_path, map_location=lambda storage, loc: storage))
+        model.to(device)
+        for parameter in model.parameters():
+            parameter.requires_grad = False
+        model.eval()
+
+        answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
+
+        d = {
+            'KG-Model': model_name,
+            'KG-Type': kg_type,
+            'n-hops': num_hops,
+            'Accuracy': [accuracy], 
+            'Hits@1': [hits_at_1]
+            }
+        df = pd.DataFrame(data=d)
+        df.to_csv(f"final_results.csv", mode='a', index=False, header=False)       
                     
 
 def process_text_file(text_file, split=False):
@@ -317,51 +366,39 @@ for i in range(3):
     bn = np.load(embedding_folder + '/bn' + str(i) + '.npy', allow_pickle=True)
     bn_list.append(bn.item())
 
-if args.mode == 'train':
-    train(data_path=data_path, 
-    entity_path=entity_embedding_path, 
-    relation_path=relation_embedding_path,
-    entity_dict=entity_dict, 
-    relation_dict=relation_dict, 
-    neg_batch_size=args.neg_batch_size, 
-    batch_size=args.batch_size,
-    shuffle=args.shuffle_data, 
-    num_workers=args.num_workers,
-    nb_epochs=args.nb_epochs, 
-    embedding_dim=args.embedding_dim, 
-    hidden_dim=args.hidden_dim, 
-    relation_dim=args.relation_dim, 
-    gpu=args.gpu, 
-    use_cuda=args.use_cuda, 
-    valid_data_path=valid_data_path,
-    patience=args.patience,
-    validate_every=args.validate_every,
-    freeze=args.freeze,
-    num_hops=args.hops,
-    lr=args.lr,
-    entdrop=args.entdrop,
-    reldrop=args.reldrop,
-    scoredrop = args.scoredrop,
-    l3_reg = args.l3_reg,
-    model_name=args.model,
-    decay=args.decay,
-    ls=args.ls,
-    w_matrix=w_matrix,
-    bn_list=bn_list,
-    kg_type=kg_type)
+if args.mode=='test':
+    data_path = test_data_path
 
-
-
-elif args.mode == 'eval':
-    eval(data_path = test_data_path,
-    entity_path=entity_embedding_path, 
-    relation_path=relation_embedding_path, 
-    entity_dict=entity_dict, 
-    relation_dict=relation_dict,
-    model_path='../../checkpoints/MetaQA/best_score_model.pt',
-    train_data=data_path,
-    gpu=args.gpu,
-    hidden_dim=args.hidden_dim,
-    relation_dim=args.relation_dim,
-    embedding_dim=args.embedding_dim,
-    kg_type=kg_type)
+perform_experiment(data_path=data_path, 
+mode=args.mode,
+entity_path=entity_embedding_path, 
+relation_path=relation_embedding_path,
+entity_dict=entity_dict, 
+relation_dict=relation_dict, 
+neg_batch_size=args.neg_batch_size, 
+batch_size=args.batch_size,
+shuffle=args.shuffle_data, 
+num_workers=args.num_workers,
+nb_epochs=args.nb_epochs, 
+embedding_dim=args.embedding_dim, 
+hidden_dim=args.hidden_dim, 
+relation_dim=args.relation_dim, 
+gpu=args.gpu, 
+use_cuda=args.use_cuda, 
+valid_data_path=valid_data_path,
+test_data_path=test_data_path,
+patience=args.patience,
+validate_every=args.validate_every,
+freeze=args.freeze,
+num_hops=args.hops,
+lr=args.lr,
+entdrop=args.entdrop,
+reldrop=args.reldrop,
+scoredrop = args.scoredrop,
+l3_reg = args.l3_reg,
+model_name=args.model,
+decay=args.decay,
+ls=args.ls,
+w_matrix=w_matrix,
+bn_list=bn_list,
+kg_type=kg_type)
