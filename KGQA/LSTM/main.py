@@ -271,7 +271,6 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
         model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
-        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
 
         model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
         model.load_state_dict(torch.load(model_chkpt_file_path, map_location=lambda storage, loc: storage))
