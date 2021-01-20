@@ -154,7 +154,7 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
 
     if return_hits_at_k:
         return answers, accuracy, (hit_at_1/len(data))
-    else
+    else:
         return answers, accuracy
 
 def writeToFile(lines, fname):
