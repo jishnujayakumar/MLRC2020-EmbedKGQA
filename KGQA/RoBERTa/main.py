@@ -409,6 +409,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
         model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
         model.load_state_dict(torch.load(model_chkpt_file_path, map_location=lambda storage, loc: storage))
+        model.to(device)
         for parameter in model.parameters():
             parameter.requires_grad = False
         model.eval()
