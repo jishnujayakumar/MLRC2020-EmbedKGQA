@@ -243,7 +243,7 @@ def infer(data_path, device, model, train_dataloader, entity2idx, model_name, re
         if inTopk(new_scores, ans, 5):
             hit_at_5 += 1
         if inTopk(new_scores, ans, 10):
-            hit_at_50 += 1
+            hit_at_10 += 1
 
         if type(ans) is int:
             ans = [ans]
@@ -329,29 +329,27 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
     print('Loaded entities and relations')
 
     entity2idx, idx2entity, embedding_matrix = prepare_embeddings(e)
-    data = process_text_file(data_path, split=False)
-    print('Train file processed, making dataloader')
+
     # word2ix,idx2word, max_len = get_vocab(data)
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
-    dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
-    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    print('Creating model...')
     model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
-    print('Model created!')
-    if load_from != '':
-        # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
-        fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
-        model.load_state_dict(torch.load(fname, map_location=lambda storage, loc: storage))
-    model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = ExponentialLR(optimizer, decay)
-    optimizer.zero_grad()
-    best_score = -float("inf")
-    best_model = model.state_dict()
-    no_update = 0
+
     # time.sleep(10)
     if mode=='train':
+        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
+        data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+        if load_from != '':
+            # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
+            fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
+            model.load_state_dict(torch.load(fname, map_location=lambda storage, loc: storage))
+        model.to(device)
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+        scheduler = ExponentialLR(optimizer, decay)
+        optimizer.zero_grad()
+        best_score = -float("inf")
+        best_model = model.state_dict()
+        no_update = 0
         for epoch in range(nb_epochs):
             phases = []
             for i in range(validate_every):
