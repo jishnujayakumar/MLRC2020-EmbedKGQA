@@ -261,7 +261,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
                         torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                         exit()
     elif mode=='test':
-        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
+        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ get_chk_suffix()
         
         print(model_chkpt_file_path)
         
