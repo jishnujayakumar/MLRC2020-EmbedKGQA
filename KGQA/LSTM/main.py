@@ -240,7 +240,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
                         no_update = 0
                         best_model = model.state_dict()
                         print(hops + " hop Validation accuracy increased from previous epoch", score)
-                        _, test_score = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name)
+                        _, test_score = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=False)
                         print('Test score for best valid so far:', test_score)
                         # writeToFile(answers, 'results_' + model_name + '_' + hops + '.txt')
                         suffix = ''
@@ -270,8 +270,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
             parameter.requires_grad = False
         model.eval()
 
-        answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
-
+        answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=True)
         d = {
             'KG-Model': model_name,
             'KG-Type': kg_type,
