@@ -266,11 +266,13 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         print(model_chkpt_file_path)
         
         model.load_state_dict(torch.load(model_chkpt_file_path))
-        for parameter in model.parameters():
-            parameter.requires_grad = False
-        model.eval()
+        # for parameter in model.parameters():
+        #     parameter.requires_grad = False
 
         answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=True)
+
+        print(accuracy, hits_at_1)
+
         d = {
             'KG-Model': model_name,
             'KG-Type': kg_type,
