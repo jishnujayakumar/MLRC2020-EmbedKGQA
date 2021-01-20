@@ -149,7 +149,7 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
         except:
             error_count += 1
             
-    print(error_count)
+    print(f"Total Correct: {total_correct}")
     accuracy = total_correct/len(data)
 
     if return_hits_at_k:
