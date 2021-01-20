@@ -186,6 +186,9 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     word2ix,idx2word, max_len = get_vocab(data)
     hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
+
+    dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
+
     model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
     model.to(device)
 
@@ -197,7 +200,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         best_score = -float("inf")
         best_model = model.state_dict()
         no_update = 0
-
+        data_loader = DataLoaderMetaQA(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         for epoch in range(nb_epochs):
             phases = []
             for i in range(validate_every):
