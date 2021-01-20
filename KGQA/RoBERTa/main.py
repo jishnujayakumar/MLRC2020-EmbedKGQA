@@ -160,7 +160,7 @@ def inTopk(scores, ans, k):
             result = True
     return result
 
-def infer(data_path, device, model, train_dataloader, entity2idx, model_name, return_hits_at_k):
+def test(data_path, device, model, train_dataloader, entity2idx, model_name, return_hits_at_k):
     model.eval()
     data = process_text_file(data_path)
     idx2entity = {}
@@ -334,10 +334,10 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
     model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
-    dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
 
     # time.sleep(10)
     if mode=='train':
+        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
@@ -380,7 +380,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                 elif phase=='valid':
                     model.eval()
                     eps = 0.0001
-                    answers, score = infer(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
+                    answers, score = test(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
                     if score > best_score + eps:
                         best_score = score
                         no_update = 0
@@ -408,7 +408,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         for parameter in model.parameters():
             parameter.requires_grad = False
         model.eval()
-        answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = infer(model=model, data_path= test_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
+        answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = test(model=model, data_path= test_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
 
         print(f"ACC: {accuracy}")
         print(f"Hits@1: {hits_at_1}")
