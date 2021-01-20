@@ -10,7 +10,7 @@ from torch.nn import functional as F
 from dataloader import DatasetMetaQA, DataLoaderMetaQA
 from model import RelationExtractor
 from torch.optim.lr_scheduler import ExponentialLR
-
+import pandas as pd
 
 def str2bool(v):
     if isinstance(v, bool):
