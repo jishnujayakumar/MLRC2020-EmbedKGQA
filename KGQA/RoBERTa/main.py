@@ -334,10 +334,10 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
     # hops = str(num_hops)
     device = torch.device(gpu if use_cuda else "cpu")
     model = RelationExtractor(embedding_dim=embedding_dim, num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, que_embedding_model=que_embedding_model, ls = ls, do_batch_norm=do_batch_norm)
+    dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
 
     # time.sleep(10)
     if mode=='train':
-        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
