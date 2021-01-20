@@ -270,14 +270,14 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
 
         model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
 
-        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ get_chk_suffix()
+        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
         
         print(model_chkpt_file_path)
         
         model.load_state_dict(torch.load(model_chkpt_file_path))
-        model.to(device)
         for parameter in model.parameters():
             parameter.requires_grad = False
+        model.to(device)
         model.eval()
 
         answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
@@ -364,9 +364,6 @@ bn_list = []
 for i in range(3):
     bn = np.load(embedding_folder + '/bn' + str(i) + '.npy', allow_pickle=True)
     bn_list.append(bn.item())
-
-if args.mode=='test':
-    data_path = test_data_path
 
 perform_experiment(data_path=data_path, 
 mode=args.mode,
