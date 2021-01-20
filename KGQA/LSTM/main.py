@@ -274,7 +274,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         
         print(model_chkpt_file_path)
         
-        model.load_state_dict(torch.load(model_chkpt_file_path, map_location=lambda storage, loc: storage))
+        model.load_state_dict(torch.load(model_chkpt_file_path))
         model.to(device)
         for parameter in model.parameters():
             parameter.requires_grad = False
