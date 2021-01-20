@@ -14,6 +14,7 @@ from torch.optim.lr_scheduler import ExponentialLR, ReduceLROnPlateau
 import networkx as nx
 import time
 import sys
+import pandas as pd
 sys.path.append("../..") # Adds higher directory to python modules path.
 from kge.model import KgeModel
 from kge.util.io import load_checkpoint
@@ -160,14 +161,14 @@ def inTopk(scores, ans, k):
             result = True
     return result
 
-def test(data_path, device, model, train_dataloader, entity2idx, model_name, return_hits_at_k):
+def test(data_path, device, model, dataloader, entity2idx, model_name, return_hits_at_k):
     model.eval()
     data = process_text_file(data_path)
     idx2entity = {}
     for key, value in entity2idx.items():
         idx2entity[value] = key
     answers = []
-    data_gen = data_generator(data=data, dataloader=train_dataloader, entity2idx=entity2idx)
+    data_gen = data_generator(data=data, dataloader=dataloader, entity2idx=entity2idx)
     total_correct = 0
     error_count = 0
     num_incorrect = 0
@@ -337,6 +338,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
 
     # time.sleep(10)
     if mode=='train':
+        data = process_text_file(data_path)
         dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         if load_from != '':
@@ -380,7 +382,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                 elif phase=='valid':
                     model.eval()
                     eps = 0.0001
-                    answers, score = test(model=model, data_path= valid_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
+                    answers, score = test(model=model, data_path= valid_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=False)
                     if score > best_score + eps:
                         best_score = score
                         no_update = 0
@@ -403,17 +405,26 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                     # torch.save(model.state_dict(), "checkpoints/roberta_finetune/x.pt")   
     
     elif mode=='test':
+        data = process_text_file(test_data_path)
+        dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
         model_chkpt_file_path = get_chkpt_path(model_name, que_embedding_model, outfile)
         model.load_state_dict(torch.load(model_chkpt_file_path, map_location=lambda storage, loc: storage))
         for parameter in model.parameters():
             parameter.requires_grad = False
         model.eval()
-        answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = test(model=model, data_path= test_data_path, entity2idx=entity2idx, train_dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
+        answers, accuracy, hits_at_1, hits_at_5, hits_at_10 = test(model=model, data_path= test_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
 
-        print(f"ACC: {accuracy}")
-        print(f"Hits@1: {hits_at_1}")
-        print(f"Hits@5: {hits_at_5}")
-        print(f"Hits@10: {hits_at_10}")
+        d = {
+            'KG-Model': model_name,
+            'KG-Type': kg_type,
+            'Que-Embedding-Model': que_embedding_model,
+            'Accuracy': [accuracy], 
+            'Hits@1': [hits_at_1],
+            'Hits@5': [hits_at_5],
+            'Hits@10': [hits_at_10]
+            }
+        df = pd.DataFrame(data=d)
+        df.to_csv(f"final_results.csv", mode='a', index=False, header=False)
                 
 
 def process_text_file(text_file, split=False):

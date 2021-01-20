@@ -140,3 +140,5 @@ checkpoints/
 #kge
 kge/
 
+#csv
+*.csv
