@@ -186,7 +186,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     # aditay
     # print(idx2word.keys())
     device = torch.device(gpu if use_cuda else "cpu")
-
+    checkpoint_path = '../../checkpoints/MetaQA/'
     if mode=='train':
         data = process_text_file(data_path, split=False)
         word2ix,idx2word, max_len = get_vocab(data)
@@ -202,8 +202,6 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         best_score = -float("inf")
         best_model = model.state_dict()
         no_update = 0
-
-        checkpoint_path = '../../checkpoints/MetaQA/'
 
         for epoch in range(nb_epochs):
             phases = []
