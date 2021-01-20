@@ -187,7 +187,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     # print(idx2word.keys())
     device = torch.device(gpu if use_cuda else "cpu")
 
-    if mode='train':
+    if mode=='train':
         data = process_text_file(data_path, split=False)
         word2ix,idx2word, max_len = get_vocab(data)
         dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
