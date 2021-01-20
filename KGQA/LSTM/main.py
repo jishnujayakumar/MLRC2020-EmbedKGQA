@@ -181,17 +181,16 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     relations = np.load(relation_path)
     e,r = preprocess_entities_relations(entity_dict, relation_dict, entities, relations)
     entity2idx, idx2entity, embedding_matrix = prepare_embeddings(e)
+    data = process_text_file(data_path, split=False)
+    # data = pickle.load(open(data_path, 'rb'))
+    word2ix,idx2word, max_len = get_vocab(data)
     hops = str(num_hops)
-    # print(idx2word)
-    # aditay
-    # print(idx2word.keys())
     device = torch.device(gpu if use_cuda else "cpu")
     model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
     model.to(device)
 
     checkpoint_path = '../../checkpoints/MetaQA/'
     if mode=='train':
-
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
         scheduler = ExponentialLR(optimizer, decay)
         optimizer.zero_grad()
@@ -266,7 +265,6 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         model.load_state_dict(torch.load(model_chkpt_file_path))
         for parameter in model.parameters():
             parameter.requires_grad = False
-        model.to(device)
         model.eval()
 
         answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, entity2idx=entity2idx, dataloader=dataset, device=device, model_name=model_name, return_hits_at_k=True)
