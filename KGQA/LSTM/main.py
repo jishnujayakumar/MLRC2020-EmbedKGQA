@@ -190,13 +190,13 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
     dataset = DatasetMetaQA(data=data, word2ix=word2ix, relations=r, entities=e, entity2idx=entity2idx)
 
     model = RelationExtractor(embedding_dim=embedding_dim, hidden_dim=hidden_dim, vocab_size=len(word2ix), num_entities = len(idx2entity), relation_dim=relation_dim, pretrained_embeddings=embedding_matrix, freeze=freeze, device=device, entdrop = entdrop, reldrop = reldrop, scoredrop = scoredrop, l3_reg = l3_reg, model = model_name, ls = ls, w_matrix = w_matrix, bn_list=bn_list)
-    model.to(device)
 
     checkpoint_path = '../../checkpoints/MetaQA/'
     if mode=='train':
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
         scheduler = ExponentialLR(optimizer, decay)
         optimizer.zero_grad()
+        model.to(device)
         best_score = -float("inf")
         best_model = model.state_dict()
         no_update = 0
@@ -261,11 +261,12 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
                         torch.save(best_model, get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix() )
                         exit()
     elif mode=='test':
-        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ get_chk_suffix()
+        model_chkpt_file_path=get_checkpoint_file_path(checkpoint_path, model_name, num_hops, '', kg_type)+ '_' + 'best_score_model' + get_chk_suffix()
         
         print(model_chkpt_file_path)
         
         model.load_state_dict(torch.load(model_chkpt_file_path))
+        model.to(device)
         # for parameter in model.parameters():
         #     parameter.requires_grad = False
 
