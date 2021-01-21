@@ -361,6 +361,8 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         else:
             data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn)
 
+        print("1111111111111111111111111")
+
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
             fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
