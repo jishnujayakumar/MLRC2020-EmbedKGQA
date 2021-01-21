@@ -316,7 +316,7 @@ def pad_x_collate_function(batch):
 
     xs = pad_sequence(xs, batch_first=True, padding_value=-1)
 
-    return xs, torch,stack(ys)    
+    return xs, torch.stack(ys)    
 
 def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None, test_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
