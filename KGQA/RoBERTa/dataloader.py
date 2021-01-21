@@ -76,7 +76,7 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-        if self.kg_model=="ComplEx":
+        if self.kg_model in "ComplEx/SimplE":
             question = f"<s>{question}</s>"
             question_tokenized = self.tokenizer.tokenize(question)
             question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
@@ -98,7 +98,7 @@ class DatasetWebQSP(Dataset):
             encoded_que=self.tokenizer.encode_plus(
                 text=question,  # the sentence to be encoded
                 add_special_tokens=False,  # Add [CLS] and [SEP]
-                max_length = 64,  # maximum length of a sentence
+                max_length = self.max_length,  # maximum length of a question
                 pad_to_max_length=True,  # Add [PAD]s
                 return_attention_mask = True,  # Generate the attention mask
                 return_tensors = 'pt',  # ask the function to return PyTorch tensors
