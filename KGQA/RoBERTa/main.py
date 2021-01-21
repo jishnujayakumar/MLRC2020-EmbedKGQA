@@ -480,7 +480,6 @@ def process_text_file(text_file, split=False):
         ans = data_line[1].split('|')
         data_array.append([head, question.strip(), ans])
     if split==False:
-        print("DA: ", data_array)
         return data_array
     else:
         data = []
