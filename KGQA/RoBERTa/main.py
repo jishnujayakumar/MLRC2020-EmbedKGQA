@@ -315,6 +315,9 @@ def pad_x_collate_function(batch):
     ys = [sample[1] for sample in batch]
 
     xs = pad_sequence(xs, batch_first=True, padding_value=-1)
+    ys = pad_sequence(ys, batch_first=True, padding_value=0)
+
+    print(xs ,torch.stack(ys))
 
     return xs, torch.stack(ys)    
 
