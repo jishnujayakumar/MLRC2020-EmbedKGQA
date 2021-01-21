@@ -102,9 +102,10 @@ def preprocess_entities_relations(entity_dict, relation_dict, entities, relation
     f.close()
     return e,r
 
-def inTop1(top2, ans):
+def inTopk(scores, ans, k):
     result = False
-    for x in top2:
+    topk = torch.topk(scores, k)[1]
+    for x in topk:
         if x in ans:
             result = True
     return result
@@ -118,7 +119,12 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
     error_count = 0
 
     hit_at_1 = 0
+    hit_at_5 = 0
+    hit_at_10 = 0
 
+    candidates_with_scores = []
+    writeCandidatesToFile=False
+    
     for i in tqdm(range(len(data))):
         try:
             d = next(data_gen)
@@ -127,6 +133,55 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
             ans = d[2]
             ques_len = d[3].unsqueeze(0)
             tail_test = torch.tensor(ans, dtype=torch.long).to(device)
+
+            scores = model.get_score_ranked(head=head, question_tokenized=question_tokenized, attention_mask=attention_mask)[0]
+            # candidates = qa_nbhood_list[i]
+            # mask = torch.from_numpy(getMask(candidates, entity2idx)).to(device)
+            # following 2 lines for no neighbourhood check
+            mask = torch.zeros(len(entity2idx)).to(device)
+            mask[head] = 1
+            #reduce scores of all non-candidates
+            new_scores = scores - (mask*99999)
+            pred_ans = torch.argmax(new_scores).item()
+            # new_scores = new_scores.cpu().detach().numpy()
+            # scores_list.append(new_scores)
+            if pred_ans == head.item():
+                print('Head and answer same')
+                print(torch.max(new_scores))
+                print(torch.min(new_scores))
+            # pred_ans = getBest(scores, candidates)
+            # if ans[0] not in candidates:
+            #     print('Answer not in candidates')
+                # print(len(candidates))
+                # exit(0)
+            
+            if writeCandidatesToFile:
+                entry = {}
+                entry['question'] = d[-1]
+                head_text = idx2entity[head.item()]
+                entry['head'] = head_text
+                s, c =  torch.topk(new_scores, 200)
+                s = s.cpu().detach().numpy()
+                c = c.cpu().detach().numpy()
+                cands = []
+                for cand in c:
+                    cands.append(idx2entity[cand])
+                entry['scores'] = s
+                entry['candidates'] = cands
+                correct_ans = []
+                for a in ans:
+                    correct_ans.append(idx2entity[a])
+                entry['answers'] = correct_ans
+                candidates_with_scores.append(entry)
+
+
+            if inTopk(new_scores, ans, 1):
+                hit_at_1 += 1
+            if inTopk(new_scores, ans, 5):
+                hit_at_5 += 1
+            if inTopk(new_scores, ans, 10):
+                hit_at_10 += 1
+
             top_2 = model.get_score_ranked(head=head, sentence=question, sent_len=ques_len)
 
             if inTop1(top2, ans):

@@ -292,10 +292,12 @@ class RelationExtractor(nn.Module):
         rel_embedding = self.applyNonLinear(outputs)
 
         head = self.embedding(head).unsqueeze(0)
-        score = self.getScores(head, rel_embedding)
+        scores = self.getScores(head, rel_embedding)
         
-        top2 = torch.topk(score, k=2, largest=True, sorted=True)
-        return top2
+        # top2 = torch.topk(score, k=2, largest=True, sorted=True)
+        # return top2
+
+        return scores
         
 
 
