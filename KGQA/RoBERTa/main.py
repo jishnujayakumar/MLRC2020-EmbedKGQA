@@ -316,7 +316,7 @@ def pad_x_collate_function(batch):
     xs = pad_sequence(xs, batch_first=True, padding_value=-1)
     print("xs: ", xs)
     print("ys1: ", ys)
-    print("ys2: ", torch.tensor(ys, dtype=torch.long))
+    print("ys2: ", torch.tensor(ys.toList(), dtype=torch.long))
 
     return xs, torch.tensor(ys, dtype=torch.long)
 
