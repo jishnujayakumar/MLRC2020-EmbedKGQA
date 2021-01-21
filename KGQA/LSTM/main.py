@@ -134,7 +134,7 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
             ques_len = d[3].unsqueeze(0)
             tail_test = torch.tensor(ans, dtype=torch.long).to(device)
 
-            scores = model.get_score_ranked(head=head, question_tokenized=question_tokenized, attention_mask=attention_mask)[0]
+            scores = model.get_score_ranked(head=head, sentence=question, sent_len=ques_len)[0]
             # candidates = qa_nbhood_list[i]
             # mask = torch.from_numpy(getMask(candidates, entity2idx)).to(device)
             # following 2 lines for no neighbourhood check
@@ -182,35 +182,33 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
             if inTopk(new_scores, ans, 10):
                 hit_at_10 += 1
 
-            top_2 = model.get_score_ranked(head=head, sentence=question, sent_len=ques_len)
 
-            if inTop1(top2, ans):
-                hit_at_1 += 1
-
-            top_2_idx = top_2[1].tolist()[0]
-            head_idx = head.tolist()
-            if top_2_idx[0] == head_idx:
-                pred_ans = top_2_idx[1]
-            else:
-                pred_ans = top_2_idx[0]
             if type(ans) is int:
                 ans = [ans]
             is_correct = 0
             if pred_ans in ans:
                 total_correct += 1
                 is_correct = 1
+            else:
+                num_incorrect += 1
             q_text = d[-1]
             answers.append(q_text + '\t' + str(pred_ans) + '\t' + str(is_correct))
-        except:
-            error_count += 1
-            
-    print(f"Total Correct: {total_correct}")
-    accuracy = total_correct/len(data)
 
-    if return_hits_at_k:
-        return answers, accuracy, (hit_at_1/len(data))
-    else:
-        return answers, accuracy
+            if writeCandidatesToFile:
+                # pickle.dump(candidates_with_scores, open('candidates_with_score_and_qe_half.pkl', 'wb'))
+                pickle.dump(candidates_with_scores, open('webqsp_scores_finetune.pkl', 'wb'))
+                print('wrote candidate file (for future answer processing)')
+            # np.save("scores_webqsp_complex.npy", scores_list)
+            # exit(0)
+            # print(hit_at_10/len(data))
+            accuracy = total_correct/len(data)
+            # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
+            # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
+
+            if return_hits_at_k:
+                return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
+            else:
+                return answers, accuracy
 
 def writeToFile(lines, fname):
     f = open(fname, 'w')
@@ -325,16 +323,18 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         # for parameter in model.parameters():
         #     parameter.requires_grad = False
 
-        answers, accuracy, hits_at_1 = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=True)
+        answers, accuracy, hits_at_1, hits_at_5, hits_at_10  = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=True)
 
-        print(accuracy, hits_at_1)
+        print(answers, accuracy, hits_at_1, hits_at_5, hits_at_10)
 
         d = {
             'KG-Model': model_name,
             'KG-Type': kg_type,
-            'n-hops': num_hops,
+            'Que-Embedding-Model': que_embedding_model,
             'Accuracy': [accuracy], 
-            'Hits@1': [hits_at_1]
+            'Hits@1': [hits_at_1],
+            'Hits@5': [hits_at_5],
+            'Hits@10': [hits_at_10]
             }
         df = pd.DataFrame(data=d)
         df.to_csv(f"final_results.csv", mode='a', index=False, header=False)       
