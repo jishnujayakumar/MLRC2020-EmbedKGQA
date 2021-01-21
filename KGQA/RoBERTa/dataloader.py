@@ -97,7 +97,7 @@ class DatasetWebQSP(Dataset):
         else:
             encoded_que=self.tokenizer.encode_plus(
                 text=question,  # the sentence to be encoded
-                add_special_tokens=True,  # Add [CLS] and [SEP]
+                add_special_tokens=False,  # Add [CLS] and [SEP]
                 max_length = 64,  # maximum length of a sentence
                 pad_to_max_length=True,  # Add [PAD]s
                 return_attention_mask = True,  # Generate the attention mask
