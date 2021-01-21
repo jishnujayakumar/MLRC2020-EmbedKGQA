@@ -350,7 +350,12 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
     if mode=='train':
         data = process_text_file(data_path)
         dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
-        data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=pad_x_collate_function)
+
+        if model_name=="ComplEx":
+            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+        else:
+            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=pad_x_collate_function)
+
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
             fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
