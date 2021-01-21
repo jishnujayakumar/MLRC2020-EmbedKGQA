@@ -46,7 +46,7 @@ parser.add_argument('--scoredrop', type=float, default=0.0)
 parser.add_argument('--l3_reg', type=float, default=0.0)
 parser.add_argument('--decay', type=float, default=1.0)
 parser.add_argument('--shuffle_data', type=bool, default=True)
-parser.add_argument('--num_workers', type=int, default=15)
+parser.add_argument('--num_workers', type=int, default=1)
 parser.add_argument('--lr', type=float, default=0.0001)
 parser.add_argument('--nb_epochs', type=int, default=90)
 parser.add_argument('--gpu', type=int, default=0)
@@ -313,7 +313,9 @@ def get_chkpt_path(model_name, que_embedding_model, outfile):
 def custom_collate_fn(batch):
     print(len(batch))
     for i,a in enumerate(batch):
-        print(f"{i}: {a}")
+        d=""
+        for x in a:
+            print(f"{i}: {x}")
     question_tokenized = batch[0]
     attention_mask = batch[1]
     head_id = batch[2]
@@ -321,20 +323,6 @@ def custom_collate_fn(batch):
     question_tokenized = torch.stack(question_tokenized, dim=0)
     attention_mask = torch.stack(attention_mask, dim=0)
     return question_tokenized, attention_mask, head_id, tail_onehot 
-
-def pad_x_collate_function(batch):
-
-    print(batch)
-
-    xs = [sample[0] for sample in batch]
-    ys = [sample[1] for sample in batch]
-    xs = pad_sequence(xs, batch_first=True, padding_value=-1)
-    # ys = pad_sequence(ys, batch_first=True, padding_value=0)
-    # print("xs: ", xs)
-    # print("ys1: ", ys)
-    # print("ys2: ", torch.tensor(ys, dtype=torch.long))
-
-    return xs, torch.tensor(ys.toList(), dtype=torch.long)
 
 def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None, test_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
