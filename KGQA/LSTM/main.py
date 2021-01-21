@@ -325,6 +325,7 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
         d = {
             'KG-Model': model_name,
             'KG-Type': kg_type,
+            'hops': num_hops,
             'Accuracy': [accuracy], 
             'Hits@1': [hits_at_1],
             'Hits@5': [hits_at_5],
