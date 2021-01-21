@@ -311,12 +311,16 @@ def get_chkpt_path(model_name, que_embedding_model, outfile):
     return f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt"
 
 def pad_x_collate_function(batch):
+
+    print(batch)
+
     xs = [sample[0] for sample in batch]
     ys = [sample[1] for sample in batch]
     xs = pad_sequence(xs, batch_first=True, padding_value=-1)
+    # ys = pad_sequence(ys, batch_first=True, padding_value=0)
     # print("xs: ", xs)
     # print("ys1: ", ys)
-    # print("ys2: ", torch.tensor(ys.toList(), dtype=torch.long))
+    # print("ys2: ", torch.tensor(ys, dtype=torch.long))
 
     return xs, torch.tensor(ys.toList(), dtype=torch.long)
 
