@@ -312,6 +312,8 @@ def get_chkpt_path(model_name, que_embedding_model, outfile):
 
 def custom_collate_fn(batch):
     print(len(batch))
+    for i,a in enumerate(batch):
+        print(f"{i}: {a}")
     question_tokenized = batch[0]
     attention_mask = batch[1]
     head_id = batch[2]
