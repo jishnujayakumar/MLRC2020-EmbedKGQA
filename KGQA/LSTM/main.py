@@ -320,12 +320,11 @@ def perform_experiment(data_path, mode, entity_path, relation_path, entity_dict,
 
         answers, accuracy, hits_at_1, hits_at_5, hits_at_10  = validate(model=model, data_path= test_data_path, word2idx= word2ix, entity2idx= entity2idx, device=device, model_name=model_name, return_hits_at_k=True)
 
-        print(answers, accuracy, hits_at_1, hits_at_5, hits_at_10)
+        print(accuracy, hits_at_1, hits_at_5, hits_at_10)
 
         d = {
             'KG-Model': model_name,
             'KG-Type': kg_type,
-            'Que-Embedding-Model': que_embedding_model,
             'Accuracy': [accuracy], 
             'Hits@1': [hits_at_1],
             'Hits@5': [hits_at_5],
