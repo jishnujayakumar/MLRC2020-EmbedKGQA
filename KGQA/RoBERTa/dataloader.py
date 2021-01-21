@@ -76,7 +76,7 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-        if self.kg_model in "ComplEx/SimplE":
+        if self.kg_model in "ComplEx":
             question = f"<s>{question}</s>"
             question_tokenized = self.tokenizer.tokenize(question)
             question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
