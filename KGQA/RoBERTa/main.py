@@ -311,20 +311,18 @@ def get_chkpt_path(model_name, que_embedding_model, outfile):
     return f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt"
 
 def custom_collate_fn(batch):
-    return batch
-    # print(len(batch))
-    # print(batch)
-    # for i,a in enumerate(batch):
-    #     d=""
-    #     for x in a:
-    #         print(f"{i}: {x}")
-    # question_tokenized = batch[0]
-    # attention_mask = batch[1]
-    # head_id = batch[2]
-    # tail_onehot = batch[3]
-    # question_tokenized = torch.stack(question_tokenized, dim=0)
-    # attention_mask = torch.stack(attention_mask, dim=0)
-    # return question_tokenized, attention_mask, head_id, tail_onehot 
+    print(len(batch))
+    print(batch)
+    for i,a in enumerate(batch):
+        for x in a:
+            print(f"{i}: {x}: {batch}")
+    question_tokenized = batch[0]
+    attention_mask = batch[1]
+    head_id = batch[2]
+    tail_onehot = batch[3]
+    question_tokenized = torch.stack(question_tokenized, dim=0)
+    attention_mask = torch.stack(attention_mask, dim=0)
+    return question_tokenized, attention_mask, head_id, tail_onehot 
 
 def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None, test_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
