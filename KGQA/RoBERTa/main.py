@@ -314,7 +314,7 @@ def pad_x_collate_function(batch):
     xs = [sample[0] for sample in batch]
     ys = [sample[1] for sample in batch]
 
-    xs = pad_sequence(xs, batch_first=True, padding_value=0.001)
+    xs = pad_sequence(xs, batch_first=True, padding_value=-1)
 
     print("xs: ", xs)
     print("ys: ", ys)
