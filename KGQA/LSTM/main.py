@@ -193,22 +193,17 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
                 num_incorrect += 1
             q_text = d[-1]
             answers.append(q_text + '\t' + str(pred_ans) + '\t' + str(is_correct))
+        except:
+            error_count += 1
+        
+        accuracy = total_correct/len(data)
+        # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
+        # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
 
-            if writeCandidatesToFile:
-                # pickle.dump(candidates_with_scores, open('candidates_with_score_and_qe_half.pkl', 'wb'))
-                pickle.dump(candidates_with_scores, open('webqsp_scores_finetune.pkl', 'wb'))
-                print('wrote candidate file (for future answer processing)')
-            # np.save("scores_webqsp_complex.npy", scores_list)
-            # exit(0)
-            # print(hit_at_10/len(data))
-            accuracy = total_correct/len(data)
-            # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
-            # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
-
-            if return_hits_at_k:
-                return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
-            else:
-                return answers, accuracy
+        if return_hits_at_k:
+            return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
+        else:
+            return answers, accuracy
 
 def writeToFile(lines, fname):
     f = open(fname, 'w')
