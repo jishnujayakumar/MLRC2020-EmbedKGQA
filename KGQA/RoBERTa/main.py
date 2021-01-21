@@ -346,7 +346,6 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
             fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
             model.load_state_dict(torch.load(fname, map_location=lambda storage, loc: storage))
         model.to(device)
-        model.eval()
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
         scheduler = ExponentialLR(optimizer, decay)
         optimizer.zero_grad()
