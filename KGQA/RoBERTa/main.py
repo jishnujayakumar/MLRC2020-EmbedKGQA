@@ -316,8 +316,8 @@ def pad_x_collate_function(batch):
     ys = [sample[1] for sample in batch] 
     # If you want to be a little fancy, you can do the above in one line 
     # xs, ys = zip(*samples) 
-    xs = pad_sequence(xs, batch_first=True, padding_value=0)
-    return xs, torch.tensor(ys)
+    xs = pad_sequence(xs, batch_first=True, padding_value=0.001)
+    return torch.tensor(xs), torch.tensor(ys)
 
 def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs, embedding_dim, hidden_dim, relation_dim, gpu, use_cuda,patience, freeze, validate_every, hops, lr, entdrop, reldrop, scoredrop, l3_reg, model_name, decay, ls, load_from, outfile, do_batch_norm, que_embedding_model, valid_data_path=None, test_data_path=None):
     webqsp_checkpoint_folder = f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/"
