@@ -196,14 +196,14 @@ def validate(data_path, device, model, word2idx, entity2idx, model_name, return_
         except:
             error_count += 1
         
-        accuracy = total_correct/len(data)
-        # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
-        # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
+    accuracy = total_correct/len(data)
+    # print('Error mean rank: %f' % (incorrect_rank_sum/num_incorrect))
+    # print('%d out of %d incorrect were not in top 50' % (not_in_top_50_count, num_incorrect))
 
-        if return_hits_at_k:
-            return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
-        else:
-            return answers, accuracy
+    if return_hits_at_k:
+        return answers, accuracy, (hit_at_1/len(data)), (hit_at_5/len(data)), (hit_at_10/len(data))
+    else:
+        return answers, accuracy
 
 def writeToFile(lines, fname):
     f = open(fname, 'w')
