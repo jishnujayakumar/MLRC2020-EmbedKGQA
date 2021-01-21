@@ -387,6 +387,9 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                     loader = tqdm(data_loader, total=len(data_loader), unit="batches")
                     running_loss = 0
                     for i_batch, a in enumerate(loader):
+
+                        print("Loader: {loader}")
+
                         model.zero_grad()
                         question_tokenized = a[0].to(device)
                         attention_mask = a[1].to(device)
@@ -399,6 +402,8 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                         loader.set_postfix(Loss=running_loss/((i_batch+1)*batch_size), Epoch=epoch)
                         loader.set_description('{}/{}'.format(epoch, nb_epochs))
                         loader.update()
+
+                        print("2222222222222222222222222222222")
                     
                     scheduler.step()
 
