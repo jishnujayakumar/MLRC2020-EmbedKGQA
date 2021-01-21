@@ -310,6 +310,16 @@ def getEntityEmbeddings(model_name, kge_model, hops):
 def get_chkpt_path(model_name, que_embedding_model, outfile):
     return f"../../checkpoints/WebQSP/{model_name}_{que_embedding_model}_{outfile}/best_score_model.pt"
 
+def custom_collate_fn(batch):
+    print(len(batch))
+    question_tokenized = batch[0]
+    attention_mask = batch[1]
+    head_id = batch[2]
+    tail_onehot = batch[3]
+    question_tokenized = torch.stack(question_tokenized, dim=0)
+    attention_mask = torch.stack(attention_mask, dim=0)
+    return question_tokenized, attention_mask, head_id, tail_onehot 
+
 def pad_x_collate_function(batch):
 
     print(batch)
@@ -359,7 +369,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         if model_name=="ComplEx":
             data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         else:
-            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=pad_x_collate_function)
+            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn)
 
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
@@ -468,6 +478,7 @@ def process_text_file(text_file, split=False):
         ans = data_line[1].split('|')
         data_array.append([head, question.strip(), ans])
     if split==False:
+        print("DA: ", data_array)
         return data_array
     else:
         data = []

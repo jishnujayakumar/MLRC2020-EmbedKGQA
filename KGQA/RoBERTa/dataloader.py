@@ -96,8 +96,8 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
 
 # def _collate_fn(batch):
-#     # print(len(batch))
-#     # exit(0)
+#     print(len(batch))
+#     exit(0)
 #     question_tokenized = batch[0]
 #     attention_mask = batch[1]
 #     head_id = batch[2]
