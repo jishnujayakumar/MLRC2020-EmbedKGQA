@@ -72,7 +72,7 @@ kge start $EMBED_KGQA_DIR/config/simple-train-webqsp-<half or full>.yaml \
         # NOTE: Don't remove '*' prior to <kg-type>
 
         find \
-        $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<kg-type> \
+        $EMBED_KGQA_DIR/train_embeddings/kge/local/experiments/*<model (in lowercase)><kg-type> \
         -type f -name 'checkpoint_best.pt' -print0 | xargs -0 -r cp -t $destination_path
 
         # Copy entity_ids.del to predefined path for training QA dataset

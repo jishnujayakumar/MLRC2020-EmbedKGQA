@@ -76,24 +76,35 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-        question = f"<s>{question}</s>"
-        max_length = 64
-        question_tokenized = self.tokenizer.tokenize(question)
-        question_tokenized = self.pad_sequence(question_tokenized, max_length)
-        question_tokenized = torch.tensor(self.tokenizer.encode(
-                                question, # Question to encode
-                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
-                                ))
+        if self.kg_model=="ComplEx":
+            question = f"<s>{question}</s>"
+            question_tokenized = self.tokenizer.tokenize(question)
+            question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
+            question_tokenized = torch.tensor(self.tokenizer.encode(
+                                    question, # Question to encode
+                                    add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                    ))
 
-        attention_mask = []
-        for q in question_tokenized:
-            # 1 means padding token
-            if q == 1:
-                attention_mask.append(0)
-            else:
-                attention_mask.append(1)
+            attention_mask = []
+            for q in question_tokenized:
+                # 1 means padding token
+                if q == 1:
+                    attention_mask.append(0)
+                else:
+                    attention_mask.append(1)
 
-        return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+            return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
+        else:
+            encoded_que=self.tokenizer.encode_plus(
+                text=question,  # the sentence to be encoded
+                add_special_tokens=True,  # Add [CLS] and [SEP]
+                max_length = 64,  # maximum length of a sentence
+                pad_to_max_length=True,  # Add [PAD]s
+                return_attention_mask = True,  # Generate the attention mask
+                return_tensors = 'pt',  # ask the function to return PyTorch tensors
+            )
+
+            return encoded['input_ids'], encoded['attention_mask']
 
 class DataLoaderWebQSP(DataLoader):
     def __init__(self, *args, **kwargs):
