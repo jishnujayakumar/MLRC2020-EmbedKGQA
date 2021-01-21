@@ -358,10 +358,12 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
         data = process_text_file(data_path)
         dataset = DatasetWebQSP(data, e, entity2idx, que_embedding_model, model_name)
 
-        if model_name=="ComplEx":
-            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-        else:
-            data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn)
+        # if model_name=="ComplEx":
+        #     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+        # else:
+        #     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=custom_collate_fn)
+
+        data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
         print("1111111111111111111111111")
 
@@ -389,7 +391,7 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                     running_loss = 0
                     for i_batch, a in enumerate(loader):
 
-                        print("Loader: {loader}")
+                        print(f"Loader: {loader}")
 
                         model.zero_grad()
                         question_tokenized = a[0].to(device)
