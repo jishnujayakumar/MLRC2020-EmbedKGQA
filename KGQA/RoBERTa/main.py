@@ -312,6 +312,7 @@ def get_chkpt_path(model_name, que_embedding_model, outfile):
 
 def custom_collate_fn(batch):
     print(len(batch))
+    print(batch)
     for i,a in enumerate(batch):
         d=""
         for x in a:
