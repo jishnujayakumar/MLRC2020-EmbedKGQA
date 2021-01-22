@@ -76,7 +76,9 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-        question = f"<s>{question}</s>"
+
+        if self.transformer_name != "SentenceTransformer": 
+            question = f"<s>{question}</s>"
         question_tokenized = self.tokenizer.tokenize(question)
         question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
         
