@@ -47,7 +47,7 @@ python main.py  --model TuckER \
         # Copy to predefined location
         cp -R $EMBED_KGQA_DIR/kg_embeddings/<model>/<dataset-name-2>/* $destination_path
         ```
-### Train WebQuestionsSP KG
+### Train WebQSP KG
 
 ```bash
 #for kg_type:{half, full} use config_suffix:{half, full}
