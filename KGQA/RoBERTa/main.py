@@ -363,8 +363,6 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
 
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-        print("1111111111111111111111111")
-
         if load_from != '':
             # model.load_state_dict(torch.load("checkpoints/roberta_finetune/" + load_from + ".pt"))
             fname = f"checkpoints/{que_embedding_model}_finetune/{load_from}.pt"
@@ -388,9 +386,6 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                     loader = tqdm(data_loader, total=len(data_loader), unit="batches")
                     running_loss = 0
                     for i_batch, a in enumerate(loader):
-
-                        print(f"Loader: {loader}")
-
                         model.zero_grad()
                         question_tokenized = a[0].to(device)
                         attention_mask = a[1].to(device)
@@ -404,8 +399,6 @@ def perform_experiment(data_path, mode, neg_batch_size, batch_size, shuffle, num
                         loader.set_description('{}/{}'.format(epoch, nb_epochs))
                         loader.update()
 
-                        print("2222222222222222222222222222222")
-                    
                     scheduler.step()
 
                 elif phase=='valid':

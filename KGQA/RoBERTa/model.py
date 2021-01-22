@@ -254,8 +254,6 @@ class RelationExtractor(nn.Module):
         rel_embedding = self.applyNonLinear(question_embedding)
         p_head = self.embedding(p_head)
 
-        print(f"phead-shape: {p_head.shape}")
-
         pred = self.getScores(p_head, rel_embedding)
         actual = p_tail
         if self.label_smoothing:
