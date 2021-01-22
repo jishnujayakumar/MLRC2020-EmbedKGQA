@@ -255,7 +255,6 @@ class RelationExtractor(nn.Module):
         p_head = self.embedding(p_head)
 
         print(f"phead-shape: {p_head.shape}")
-        exit(0)
 
         pred = self.getScores(p_head, rel_embedding)
         actual = p_tail
