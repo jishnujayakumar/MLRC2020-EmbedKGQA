@@ -83,7 +83,7 @@ class DatasetWebQSP(Dataset):
         
         
 
-        question_tokenized = torch.tensor(self.tokenizer.convert_tokens_to_ids(
+        question_tokenized = torch.tensor(self.tokenizer.encode(
                                 question_tokenized #, # Question to encode
                                 # add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
                                 ))
