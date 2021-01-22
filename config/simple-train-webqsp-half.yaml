@@ -4,7 +4,7 @@ dataset.name: fbwq_half
 model: simple
 
 train:
-  max_epochs: 25
+  max_epochs: 100
   num_workers: 20
 
   optimizer.default:
