@@ -76,7 +76,6 @@ class DatasetWebQSP(Dataset):
         return question_tokenized, attention_mask, head_id, tail_onehot 
 
     def tokenize_question(self, question):
-
         add_special_tokens=False
 
         if self.transformer_name != "SentenceTransformer": 
