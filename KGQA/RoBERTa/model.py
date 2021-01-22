@@ -254,7 +254,7 @@ class RelationExtractor(nn.Module):
         rel_embedding = self.applyNonLinear(question_embedding)
         p_head = self.embedding(p_head)
 
-        print(f"phead-shape: {phead.shape}")
+        print(f"phead-shape: {p_head.shape}")
         exit(0)
 
         pred = self.getScores(p_head, rel_embedding)
