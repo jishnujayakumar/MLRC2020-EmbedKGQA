@@ -78,7 +78,7 @@ class DatasetWebQSP(Dataset):
     def tokenize_question(self, question):
         
         if self.transformer_name == "SentenceTransformer":
-            question = [].append(question)
+            question = [question]
         else:
             question = f"<s>{question}</s>"
 
