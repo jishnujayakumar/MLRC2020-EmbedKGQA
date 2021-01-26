@@ -80,8 +80,13 @@ class DatasetWebQSP(Dataset):
         question_tokenized = self.tokenizer.tokenize(question)
         question_tokenized = self.pad_sequence(question_tokenized, self.max_length)
         
+        if self.transformer_name == "SentenceTransformer":
+            encode_input = question
+        else:
+            encode_input = question_tokenized
+
         question_tokenized = torch.tensor(self.tokenizer.encode(
-                                question_tokenized, # Question to encode
+                                encode_input, # Question to encode
                                 add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
                                 ))
 
