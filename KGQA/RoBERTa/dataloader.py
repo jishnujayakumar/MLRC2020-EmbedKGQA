@@ -100,7 +100,7 @@ class DatasetWebQSP(Dataset):
             print([question], type([question]))
 
             encoded_que = self.tokenizer.encode(question, padding=True, truncation=True, max_length=self.max_length, return_tensors='pt')
-            return encoded_que[0]['input_ids'], encoded_que[0]['attention_mask']
+            return encoded_que['input_ids'], encoded_que['attention_mask']
 
 # def _collate_fn(batch):
 #     print(len(batch))
