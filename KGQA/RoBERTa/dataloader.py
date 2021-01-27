@@ -77,8 +77,11 @@ class DatasetWebQSP(Dataset):
 
     def tokenize_question(self, question):
         
+        add_special_tokens=False
+
         if self.transformer_name == "SentenceTransformer":
             question = [question]
+            add_special_tokens=True
         else:
             question = f"<s>{question}</s>"
 
@@ -87,7 +90,9 @@ class DatasetWebQSP(Dataset):
 
         question_tokenized = torch.tensor(self.tokenizer.encode(
                                 question_tokenized, # Question to encode
-                                add_special_tokens = False # Add '[CLS]' and '[SEP]', as per original paper
+                                add_special_tokens = add_special_tokens, # Add '[CLS]' and '[SEP]', as per original paper
+                                padding=True, 
+                                truncation=True
                                 ))
 
         attention_mask = []
