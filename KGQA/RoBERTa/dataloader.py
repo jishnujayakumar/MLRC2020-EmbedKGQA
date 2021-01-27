@@ -98,8 +98,11 @@ class DatasetWebQSP(Dataset):
 
             return question_tokenized, torch.tensor(attention_mask, dtype=torch.long)
         else:
-            encoded_input = self.tokenizer.encode([question], padding=True, truncation=True, max_length=self.max_length, return_tensors='pt')
-            return encoded_input['input_ids'], encoded_input['attention_mask']
+            print(question, type(question))
+            print([question], type([question]))
+
+            encoded_que = self.tokenizer.encode([question], padding=True, truncation=True, max_length=self.max_length, return_tensors='pt')
+            return encoded_que['input_ids'], encoded_que['attention_mask']
 
 # def _collate_fn(batch):
 #     print(len(batch))
