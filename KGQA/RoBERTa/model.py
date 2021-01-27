@@ -252,8 +252,8 @@ class RelationExtractor(nn.Module):
                 # model_output = model(**encoded_input) 
             
             question_embedding = mean_pooling(model_output, attention_mask)
-
-            return question_embedding
+            print(question_embedding)
+            return question_embedding[0]
         else:
             last_hidden_states = self.que_embedding_model(
                                     question_tokenized, 
