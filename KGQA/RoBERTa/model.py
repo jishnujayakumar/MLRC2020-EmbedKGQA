@@ -233,20 +233,6 @@ class RelationExtractor(nn.Module):
     
     def getQuestionEmbedding(self, question_tokenized, attention_mask):
         if self.que_embedding_model == "SentenceTransformer":
-            # token_type_ids = []
-            # for am in attention_mask:
-            #     # 1 means padding token
-            #     if am == 1:
-            #         token_type_ids.append(0)
-            #     else:
-            #         token_type_ids.append(1)
-
-            # encoded_input={
-            #     'input_ids': question_tokenized,
-            #     'token_type_ids': token_type_ids,
-            #     'attention_mask': attention_mask
-            # }
-
             with torch.no_grad():
                 model_output = self.que_embedding_model(question_tokenized, attention_mask)
                 # model_output = model(**encoded_input) 
