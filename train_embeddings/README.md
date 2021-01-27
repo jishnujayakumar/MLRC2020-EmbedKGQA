@@ -10,7 +10,10 @@
 - Tests have been performed on the following models(`<model>`)
     - ComplEx: Pretrained-model has been taken from [EmbedKGQA](https://github.com/malllabiisc/EmbedKGQA#metaqa)[1].
     - TuckER: Training has been performed for `MetaQA` KG dataset.
-    - SimplE: Training has been performed for `WebQSP` KG dataset. (Due to non-availability of Vanilla TuckER model in `LibKGE`: [2b693e3](https://github.com/uma-pi1/kge/tree/2b693e31c4c06c71336f1c553727419fe01d4aa6)).
+    - SimplE: Training has been performed for `WebQSP` KG dataset.
+        - (Tested due to non-availability of Vanilla TuckER model in `LibKGE`: [2b693e3](https://github.com/uma-pi1/kge/tree/2b693e31c4c06c71336f1c553727419fe01d4aa6)). 
+        - Results are not good based on the default LibKGE settings. Hence, not included in the summary report. Feel free to change the parameters in the config and test it out yourself.
+        
 - Other supported types include: 
     - DistMult
     - RESCAL  
