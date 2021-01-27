@@ -150,7 +150,7 @@ $EMBED_KGQA_DIR/scripts/train_webqsp.sh \
 Please cite the following paper if you use this code in your work.
 
 ```bibtex
-Placeholder for ReScience C BibTex
+Placeholder for ReScience C BibTex. To be updated upon acceptance.
 ```
 
 Following 3 options are available for any clarification, comments or suggestions
