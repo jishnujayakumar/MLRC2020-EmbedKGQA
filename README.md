@@ -39,7 +39,7 @@
 
 - Also, pretrained qa_models were absent in the data shared. The reproduction results are based on training scheme used by us.
 
-- For training QA datasets, use `batch_size >= 2`. 
+- For training QA datasets, use ```batch_size >= 2```. 
 
 # Get started
 ```bash
@@ -153,6 +153,7 @@ Please cite the following paper if you use this code in your work.
 Placeholder for ReScience C BibTex
 ```
 
-For any clarification, comments, or suggestions please create an issue[i] or contact [Jishnu](https://jishnujayakumar.github.io/) or [Ashish](mailto:asardana@nvidia.com).
-
-- TODO: Once the repo is made public, setup a github discussion tab as an alternative to [i].
+Following 3 options are available for any clarification, comments or suggestions
+- Join the [discussion forum](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/discussions/).
+- Create an [issue](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/issues).
+- Contact [Jishnu](https://jishnujayakumar.github.io/) or [Ashish](mailto:asardana@nvidia.com).
