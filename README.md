@@ -4,13 +4,14 @@
 - Minor modifications have been made to [5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a) in order to perform the ablation study. In case of any query relating to the original code[1], please contact [Apoorva](https://apoorvumang.github.io/).
 # Ablation Study
 - Knowledge Graph Embedding model
-     - [TuckER](https://arxiv.org/abs/1901.09590) (For MetaQA, MetaQA_half datasets)
-     - [SimplE](https://papers.nips.cc/paper/2018/file/b2ab001909a8a6f04b51920306046ce5-Paper.pdf) (For fbwq_full, fbwq_half datasets)
+     - [TuckER](https://arxiv.org/abs/1901.09590)
+     - Tested on {MetaQA_full, MetaQA_half} datasets 
 - Question embedding models
     - [ALBERT](https://arxiv.org/abs/1909.11942)
     - [XLNet](https://arxiv.org/abs/1906.08237)
     - [Longformer](https://arxiv.org/abs/2004.05150)
     - [SentenceBERT](https://arxiv.org/abs/1908.10084) (SentenceTransformer)
+    - Tested on {fbwq_full, fbwq_half} datasets 
 
 # Requirements
 - Python >= 3.7.5, pip
