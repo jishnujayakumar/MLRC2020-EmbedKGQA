@@ -39,7 +39,7 @@
 
 - Also, pretrained qa_models were absent in the data shared. The reproduction results are based on training scheme used by us.
 
-- For training QA dataset, use `batch_size >= 2`. 
+- For training QA datasets, use `batch_size >= 2`. 
 
 # Get started
 ```bash
