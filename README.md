@@ -109,7 +109,7 @@ $EMBED_KGQA_DIR/scripts/train_metaQA.sh \
 # Method: 1
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train \
-                --relation_dim <128 (for ComplEx half ) / 200 (for ComplEx full)> \
+                --relation_dim <200 (for ComplEx half ) / 128 (for ComplEx full)> \
                 --que_embedding_model <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer> \
                 --do_batch_norm 0 \
                 --gpu 0 #GPU-ID \
