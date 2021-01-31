@@ -140,6 +140,9 @@ $EMBED_KGQA_DIR/scripts/train_webqsp.sh \
     <relation_dim>
 ```
 
+# Test QA Datasets
+Set the mode parameter as `test` (keep the other hyperparameters same as used in training)
+
 # Helpful links
 - [Details](https://github.com/malllabiisc/EmbedKGQA#instructions) about data and pretrained weights.
 - [Details](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) about dataset creation.
@@ -147,7 +150,7 @@ $EMBED_KGQA_DIR/scripts/train_webqsp.sh \
 
 
 ### Citation:
-Please cite the following paper if you use this code in your work.
+Please cite the following if you incorporate our work.
 
 ```bibtex
 Placeholder for ReScience C BibTex. To be updated upon acceptance.
