@@ -153,7 +153,17 @@ Set the mode parameter as `test` (keep the other hyperparameters same as used in
 Please cite the following if you incorporate our work.
 
 ```bibtex
-Placeholder for ReScience C BibTex. To be updated upon acceptance.
+@inproceedings{
+anonymous2021embedkgqa,
+title={Embed{\{}KGQA{\}}: Improving Multi-hop Question Answering overKnowledge Graphs using Knowledge Base Embeddings},
+author={Anonymous},
+booktitle={Submitted to ML Reproducibility Challenge 2020},
+year={2021},
+url={https://openreview.net/forum?id=VFAwCMdWY7},
+note={under review}
+}
+
+#Placeholder for ReScience C BibTex. To be updated upon acceptance.
 ```
 
 Following 3 options are available for any clarification, comments or suggestions
