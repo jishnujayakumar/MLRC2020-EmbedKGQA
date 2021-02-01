@@ -28,7 +28,8 @@
     - ```bash
       docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 jishnup/embed_kgqa:latest
       ```
-    - All the required packages, code, (datasets-to be made available after checking the license), models{pretrained and trained} are readily available in [3].
+    - All the required packages, code, models (pretrained and trained) are readily available in [3].
+        - Datasets to be made available after checking the license. Till then, refer [scripts/download_artifacts.sh](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/scripts/download_artifacts.sh#L5) to download the datasets.
 - The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This may vary w.r.t. [1].
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1].
 
