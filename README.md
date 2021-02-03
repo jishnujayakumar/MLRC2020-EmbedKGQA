@@ -24,9 +24,11 @@
     - ```bash
       docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 qts8n/cuda-python:runtime
       ```
-- Alternatively, Docker Image: [Embed_KGQA[3]](https://hub.docker.com/r/jishnup/embed_kgqa) can be used as well. It's an upgraded version of [2] and contains all the packages and code for conducting experiments. Use the `latest` tag.
+- Alternatively, Docker Image: [Embed_KGQA[3]](https://hub.docker.com/r/jishnup/embed_kgqa) can be used as well. It's an upgraded version of [2] and contains all the packages and code for conducting experiments. 
+    - Use `latest` tag for image with trained models. (Size: 53 GB)
+    - Use `env` tag for getting image without trained models. (Size: 5.7 GB)
     - ```bash
-      docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 jishnup/embed_kgqa:latest
+      docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 jishnup/embed_kgqa:env
       ```
     - All the required packages, code, datasets, models{pretrained and trained} are readily available in [3].
 - The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This may vary w.r.t. [1].
@@ -109,25 +111,25 @@ $EMBED_KGQA_DIR/scripts/train_metaQA.sh \
 # Method: 1
 cd $EMBED_KGQA_DIR/KGQA/RoBERTa;
 python main.py  --mode train \
-                --relation_dim <200 (for ComplEx half ) / 128 (for ComplEx full)> \
-                --que_embedding_model <RoBERTa/ALBERT/XLNet/Longformer/SentenceTransformer> \
+                --relation_dim 200 \
+                --que_embedding_model RoBERTa \
                 --do_batch_norm 0 \
-                --gpu 0 #GPU-ID \
+                --gpu 0 \
                 --freeze 1 \
                 --batch_size 16 \
                 --validate_every 10 \
-                --hops <webqsp_half/webqsp_full> \
+                --hops webqsp_half \
                 --lr 0.00002 \
                 --entdrop 0.0 
                 --reldrop 0.0 \
                 --scoredrop 0.0 \
                 --decay 1.0 \
-                --model <ComplEx/SimplE> \
+                --model ComplEx \
                 --patience 20 \
                 --ls 0.0 \
                 --l3_reg 0.001 \
                 --nb_epochs 200 \
-                --outfile <output_file_name>
+                --outfile delete
 
 # Method: 2
 # Modify the hyperparameters in the script file w.r.t. your usecase
