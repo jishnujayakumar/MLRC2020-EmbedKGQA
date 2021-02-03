@@ -24,9 +24,7 @@
     - ```bash
       docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 qts8n/cuda-python:runtime
       ```
-- Alternatively, Docker Image: [Embed_KGQA[3]](https://hub.docker.com/r/jishnup/embed_kgqa) can be used as well. It's an upgraded version of [2] and contains all the packages and code for conducting experiments. 
-    - Use `latest` tag for image with trained models. (Size: 53 GB)
-    - Use `env` tag for getting image without trained models. (Size: 5.7 GB)
+- Alternatively, Docker Image: [Embed_KGQA[3]](https://hub.docker.com/r/jishnup/embed_kgqa) can be used as well. It's build upon [2] and contains all the packages for conducting the experiments. Use the `env` tag.
     - ```bash
       docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 jishnup/embed_kgqa:env
       ```
