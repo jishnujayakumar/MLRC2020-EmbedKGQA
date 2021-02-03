@@ -1,8 +1,8 @@
-# EmbedKGQA: Reproduction and Ablation Study 
+# EmbedKGQA: Reproduction and Extended Study 
 - This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020) w.r.t. the [ACL 2020](https://acl2020.org/) paper [Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings](https://malllabiisc.github.io/publications/papers/final_embedkgqa.pdf)[1]
 - The code is build upon [1]:[5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a)
 - Minor modifications have been made to [5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a) in order to perform the ablation study. In case of any query relating to the original code[1], please contact [Apoorva](https://apoorvumang.github.io/).
-# Ablation Study
+# Additional Experiments
 - Knowledge Graph Embedding model
      - [TuckER](https://arxiv.org/abs/1901.09590)
      - Tested on {MetaQA_full, MetaQA_half} datasets 
@@ -30,7 +30,9 @@
     - ```bash
       docker run -itd --rm --runtime=nvidia -v /raid/kgdnn/:/raid/kgdnn/ --name embedkgqa__4567 -e NVIDIA_VISIBLE_DEVICES=4,5,6,7  -p 7777:7777 jishnup/embed_kgqa:env
       ```
-    - All the required packages, code, datasets, models{pretrained and trained} are readily available in [3].
+    - All the required packages, models (pretrained and trained) and code are readily available in [3].
+        - Location within docker container: `/raid/mlrc2020` 
+        - Datasets to be made available after checking the license. Till then, refer [scripts/download_artifacts.sh](https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/blob/main/scripts/download_artifacts.sh#L5) to download the datasets.
 - The experiments have been done using [2]. The requirements.txt packages' version have been set accordingly. This may vary w.r.t. [1].
 - `KGQA/LSTM` and `KGQA/RoBERTa` directory nomenclature hasn't been changed to avoid unnecessary confusion w.r.t. the original codebase[1].
 
@@ -142,17 +144,30 @@ $EMBED_KGQA_DIR/scripts/train_webqsp.sh \
     <relation_dim>
 ```
 
+# Test QA Datasets
+Set the mode parameter as `test` (keep the other hyperparameters same as used in training)
+
 # Helpful links
 - [Details](https://github.com/malllabiisc/EmbedKGQA#instructions) about data and pretrained weights.
 - [Details](https://github.com/malllabiisc/EmbedKGQA#dataset-creation) about dataset creation.
-- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by [Apoorva](https://apoorvumang.github.io/).
+- [Presentation](https://slideslive.com/38929421/improving-multihop-question-answering-over-knowledge-graphs-using-knowledge-base-embeddings) for [1] by [Apoorv](https://apoorvumang.github.io/).
 
 
 ### Citation:
-Please cite the following paper if you use this code in your work.
+Please cite the following if you incorporate our work.
 
 ```bibtex
-Placeholder for ReScience C BibTex. To be updated upon acceptance.
+@inproceedings{
+anonymous2021embedkgqa,
+title={Embed{\{}KGQA{\}}: Improving Multi-hop Question Answering overKnowledge Graphs using Knowledge Base Embeddings},
+author={Anonymous},
+booktitle={Submitted to ML Reproducibility Challenge 2020},
+year={2021},
+url={https://openreview.net/forum?id=VFAwCMdWY7},
+note={under review}
+}
+
+#Placeholder for ReScience C BibTex. To be updated upon acceptance.
 ```
 
 Following 3 options are available for any clarification, comments or suggestions
