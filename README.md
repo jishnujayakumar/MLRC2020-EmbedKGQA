@@ -61,7 +61,7 @@ chmod -R 700 scripts/
 # Initial setup
 ./scripts/initial_setup.sh
 
-# Download and unzip, data and pretrained_models
+# Download and unzip, data and pretrained_models from original EmbedKGQA paper
 ./scripts/download_artifacts.sh
 
 # Install LibKGE
