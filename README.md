@@ -159,13 +159,12 @@ Please cite the following if you incorporate our work.
 
 ```bibtex
 @inproceedings{
-anonymous2021embedkgqa,
-title={Embed{\{}KGQA{\}}: Improving Multi-hop Question Answering overKnowledge Graphs using Knowledge Base Embeddings},
-author={Anonymous},
-booktitle={Submitted to ML Reproducibility Challenge 2020},
+p2021embedkgqa,
+title={Embed{KGQA}: Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings},
+author={Jishnu Jaykumar P and Ashish Sardana},
+booktitle={ML Reproducibility Challenge 2020},
 year={2021},
-url={https://openreview.net/forum?id=VFAwCMdWY7},
-note={under review}
+url={https://openreview.net/forum?id=VFAwCMdWY7}
 }
 
 #Placeholder for ReScience C BibTex. To be updated upon acceptance.
