@@ -1,3 +1,5 @@
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA) [![SWH](https://archive.softwareheritage.org/badge/swh:1:dir:c95bc4fec7023c258c7190975279b5baf6ef6725/)](https://archive.softwareheritage.org/swh:1:dir:c95bc4fec7023c258c7190975279b5baf6ef6725;origin=https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA;visit=swh:1:snp:d08d258bc04ace7627e00bf0f3b12c499297e84d;anchor=swh:1:rev:9af249590ec26d122bd82eb2dc10a0c3545e7c1c)
+
 # EmbedKGQA: Reproduction and Extended Study 
 - This is the code for the [MLRC2020 challenge](https://paperswithcode.com/rc2020) w.r.t. the [ACL 2020](https://acl2020.org/) paper [Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings](https://malllabiisc.github.io/publications/papers/final_embedkgqa.pdf)[1]
 - The code is build upon [1]:[5d8fdbd4](https://github.com/malllabiisc/EmbedKGQA/tree/5d8fdbd4be77fdcb2e67a0dc8a7115844606175a)
