@@ -160,16 +160,28 @@ Set the mode parameter as `test` (keep the other hyperparameters same as used in
 Please cite the following if you incorporate our work.
 
 ```bibtex
-@inproceedings{
-p2021embedkgqa,
-title={Embed{KGQA}: Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings},
-author={Jishnu Jaykumar P and Ashish Sardana},
-booktitle={ML Reproducibility Challenge 2020},
-year={2021},
-url={https://openreview.net/forum?id=VFAwCMdWY7}
+@article{P:2021,
+  author = {P, Jishnu Jaykumar and Sardana, Ashish},
+  title = {{[Re] Improving Multi-hop Question Answering over Knowledge Graphs using Knowledge Base Embeddings}},
+  journal = {ReScience C},
+  year = {2021},
+  month = may,
+  volume = {7},
+  number = {2},
+  pages = {{#15}},
+  doi = {10.5281/zenodo.4834942},
+  url = {https://zenodo.org/record/4834942/files/article.pdf},
+  code_url = {https://github.com/jishnujayakumar/MLRC2020-EmbedKGQA},
+  code_doi = {},
+  code_swh = {swh:1:dir:c95bc4fec7023c258c7190975279b5baf6ef6725},
+  data_url = {},
+  data_doi = {},
+  review_url = {https://openreview.net/forum?id=VFAwCMdWY7},
+  type = {Replication},
+  language = {Python},
+  domain = {ML Reproducibility Challenge 2020},
+  keywords = {knowledge graph, embeddings, multi-hop, question-answering, deep learning}
 }
-
-#Placeholder for ReScience C BibTex. To be updated upon acceptance.
 ```
 
 Following 3 options are available for any clarification, comments or suggestions
